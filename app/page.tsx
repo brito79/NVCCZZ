@@ -10,6 +10,7 @@ import Newsletter from "./tabs/newsletter";
 import { EventsData, NewsletterData, PostsData } from "@/types.db";
 import Posts from "./tabs/posts";
 import EventsCalendar from "./tabs/calendar";
+import NewsletterCarousel from "./tabs/newsletter";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -337,7 +338,7 @@ export default function Home() {
                 
                 {currentTab === "newsletter" && (
                   <TabsContent value="newsletter" className="text-gray-300">
-                    <Newsletter />
+                    <NewsletterCarousel />
                   </TabsContent>
                 )}
                 
