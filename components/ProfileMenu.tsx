@@ -1,11 +1,12 @@
 'use client'
 
 import { User, Settings, LogOut, Building2, LayoutDashboard } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ProfileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const router = useRouter()
   return (
     <div className="fixed top-4 right-4 z-40">
       <button 
@@ -32,7 +33,7 @@ export default function ProfileMenu() {
             </a>
             
             <a
-              href="#"
+              href="/organization"
               className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
             >
               <Building2 className="mr-3 h-4 w-4" />
@@ -47,18 +48,17 @@ export default function ProfileMenu() {
               ERP Dashboard
             </a>
             
-            <a
-              href="#"
-              className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
-            >
-              <Settings className="mr-3 h-4 w-4" />
-              Settings
-            </a>
+
             
             <div className="border-t border-gray-700" />
             
             <a
               href="#"
+              onClick={()=> {
+                sessionStorage.clear()
+                router.push('/auth')
+
+              }}
               className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
             >
               <LogOut className="mr-3 h-4 w-4" />
