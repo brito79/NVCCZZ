@@ -1,103 +1,171 @@
-import Image from "next/image";
+'use client'
+
+'use client'
+
+import ProfileMenu from "@/components/ProfileMenu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useState } from "react";
+// Adjust the import path as needed
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [contentVisible, setContentVisible] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowWelcome(false);
+      setContentVisible(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <>
+      {/* Welcome Splash Screen */}
+      {showWelcome && (
+        <div 
+          className="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-1000"
+          style={{
+            background: `
+              radial-gradient(ellipse at center, rgba(29, 78, 216, 0.3) 0%, rgba(15, 23, 42, 1) 100%)
+            `,
+          }}
+        >
+          <div className="text-center animate-pulse">
+            <h1 className="text-5xl font-bold text-white mb-4">Welcome to NVCCZ</h1>
+            <p className="text-xl text-blue-200">Loading your experience...</p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      )}
+
+      {/* Main Content */}
+      <div 
+        className={`flex flex-col items-center justify-start min-h-screen p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
+        style={{ 
+          background: `
+            radial-gradient(ellipse at top left, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
+            linear-gradient(to bottom right, #0f172a, #1e293b, #1e3a8a)
+          `,
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Profile Menu */}
+        <ProfileMenu />
+        <Tabs defaultValue="feed" className="w-full max-w-[900px]">
+          <TabsList className="grid w-full grid-cols-4 gap-2 p-2 rounded-xl mb-8" style={{
+            backgroundColor: 'rgba(30, 41, 59, 0.8)',
+            border: '1px solid rgba(55, 65, 81, 0.5)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            backdropFilter: 'blur(8px)'
+          }}>
+            <TabsTrigger 
+              value="feed"
+              className="relative overflow-hidden rounded-lg px-6 py-3 text-sm font-medium transition-all duration-300 group"
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent'
+              }}
+            >
+              <span className="relative z-10">Feed</span>
+              <span 
+                className="absolute inset-0 opacity-0 rounded-lg transition-opacity duration-300 group-data-[state=active]:opacity-100" 
+                style={{
+                  background: 'linear-gradient(to right, #1e3a8a, #3b82f6)'
+                }}
+              />
+              <span 
+                className="absolute inset-0 rounded-lg transition-all duration-300"
+                style={{
+                  backgroundColor: 'rgba(30, 58, 138, 0)',
+                  border: '1px solid transparent'
+                }}
+              />
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="newsletter"
+              className="relative overflow-hidden rounded-lg px-6 py-3 text-sm font-medium transition-all duration-300 group"
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent'
+              }}
+            >
+              <span className="relative z-10">Newsletter</span>
+              <span 
+                className="absolute inset-0 opacity-0 rounded-lg transition-opacity duration-300 group-data-[state=active]:opacity-100" 
+                style={{
+                  background: 'linear-gradient(to right, #1e3a8a, #3b82f6)'
+                }}
+              />
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="forum"
+              className="relative overflow-hidden rounded-lg px-6 py-3 text-sm font-medium transition-all duration-300 group"
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent'
+              }}
+            >
+              <span className="relative z-10">Forum</span>
+              <span 
+                className="absolute inset-0 opacity-0 rounded-lg transition-opacity duration-300 group-data-[state=active]:opacity-100" 
+                style={{
+                  background: 'linear-gradient(to right, #1e3a8a, #3b82f6)'
+                }}
+              />
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="calendar"
+              className="relative overflow-hidden rounded-lg px-6 py-3 text-sm font-medium transition-all duration-300 group"
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent'
+              }}
+            >
+              <span className="relative z-10">Calendar</span>
+              <span 
+                className="absolute inset-0 opacity-0 rounded-lg transition-opacity duration-300 group-data-[state=active]:opacity-100" 
+                style={{
+                  background: 'linear-gradient(to right, #1e3a8a, #3b82f6)'
+                }}
+              />
+            </TabsTrigger>
+          </TabsList>
+          
+          <div 
+            className="p-6 rounded-xl shadow-xl"
+            style={{
+              backgroundColor: 'rgba(30, 41, 59, 0.6)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(55, 65, 81, 0.4)'
+            }}
+          >
+            <TabsContent value="feed" className="text-gray-300">
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#ffffff' }}>Community Feed</h3>
+              <p>Explore the latest updates from your network</p>
+            </TabsContent>
+            
+            <TabsContent value="newsletter" className="text-gray-300">
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#ffffff' }}>Newsletters</h3>
+              <p>Stay updated with curated content</p>
+            </TabsContent>
+            
+            <TabsContent value="forum" className="text-gray-300">
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#ffffff' }}>Discussion Forum</h3>
+              <p>Engage with the community in meaningful conversations</p>
+            </TabsContent>
+            
+            <TabsContent value="calendar" className="text-gray-300">
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#ffffff' }}>Event Calendar</h3>
+              <p>Never miss important dates and gatherings</p>
+            </TabsContent>
+          </div>
+        </Tabs>
+      </div>
+    </>
   );
 }
