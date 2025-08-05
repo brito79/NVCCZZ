@@ -78,4 +78,46 @@ export interface Author {
     success: boolean;
     data: Post[];
   }
+
+export interface FeedItem {
+  title: string;
+  link: string;
+  pubDate: string;
+  content: string;
+  contentSnippet: string;
+  creator: string;
+  categories: string[];
+  guid: string;
+  isoDate: string;
+  imageUrl?: string | null;
+  media?: any;
+  enclosure?: {
+    url?: string;
+    length?: number | string;
+    type?: string;
+  };
+}
+
+export interface ForexData {
+  pair: string;
+  rate: string;
+  change: string;
+  trend: 'up' | 'down' | 'stable';
+}
+
+
+export type ExchangeRate = {
+  ask: number;
+  avg: number;
+  bid: number;
+  currency: string;
+};
+
+export type BankRatesResponse = {
+  date: string;
+  exchange_rates: ExchangeRate[];
+  source: string;
+  status: string;
+  timestamp: string;
+};
   

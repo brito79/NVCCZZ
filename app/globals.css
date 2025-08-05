@@ -120,3 +120,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom animations for floating RBZ data */
+@keyframes float {
+  0% {
+    transform: translateX(100vw);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100vw);
+  }
+}
+
+@keyframes fadeInFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: fadeInFloat 0.5s ease-out;
+}
+
+.duration-4000 {
+  transition-duration: 4000ms;
+}
