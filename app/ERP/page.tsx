@@ -299,7 +299,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
         </nav>
   
         {/* Beautiful Home Button at Bottom */}
-        <div className="p-4 border-t border-gray-200/30">
+        {/* <div className="p-4 border-t border-gray-200/30">
           <Link href="/">
             <div className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200
               ${isActive('/') 
@@ -321,7 +321,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </Link>
-        </div>
+        </div> */}
       </div>
   
       {/* Main Content Area */}
