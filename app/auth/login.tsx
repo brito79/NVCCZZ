@@ -5,6 +5,7 @@ import { Lock, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ChatbotProvider } from '@/components/chatbot';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -50,17 +51,18 @@ const LoginPage = () => {
   };
 
   return (
-    <div 
-      className="flex items-center justify-center min-h-screen p-4"
-      style={{ 
-        background: `
-          radial-gradient(ellipse at top left, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
-          radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
-          linear-gradient(to bottom right, #0f172a, #1e293b, #1e3a8a)
-        `,
-        backgroundAttachment: 'fixed'
-      }}
-    >
+    <ChatbotProvider position="bottom-left">
+      <div 
+        className="flex items-center justify-center min-h-screen p-4"
+        style={{ 
+          background: `
+            radial-gradient(ellipse at top left, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
+            linear-gradient(to bottom right, #0f172a, #1e293b, #1e3a8a)
+          `,
+          backgroundAttachment: 'fixed'
+        }}
+      >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -205,6 +207,7 @@ const LoginPage = () => {
         </div>
       </motion.div>
     </div>
+    </ChatbotProvider>
   );
 }
 

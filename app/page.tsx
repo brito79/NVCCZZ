@@ -12,6 +12,7 @@ import Posts from "./tabs/posts";
 import EventsCalendar from "./tabs/calendar";
 import NewsletterCarousel from "./tabs/newsletter";
 import FeedPage from "./tabs/feeds";
+import { ChatbotProvider } from "@/components/chatbot";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -175,36 +176,37 @@ export default function Home() {
   };
 
   return (
-    <>
-      {/* Welcome Splash Screen */}
-      {showWelcome && (
+    <ChatbotProvider position="bottom-right">
+      <>
+        {/* Welcome Splash Screen */}
+        {showWelcome && (
+          <div 
+            className="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-1000"
+            style={{
+              background: `
+                radial-gradient(ellipse at center, rgba(29, 78, 216, 0.3) 0%, rgba(15, 23, 42, 1) 100%)
+              `,
+            }}
+          >
+            <div className="text-center animate-pulse">
+              <h1 className="text-5xl font-bold text-white mb-4">Welcome to NVCCZ</h1>
+              <p className="text-xl text-blue-200">Loading your experience...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content */}
         <div 
-          className="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-1000"
-          style={{
+          className={`flex flex-col items-center justify-start min-h-screen p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
+          style={{ 
             background: `
-              radial-gradient(ellipse at center, rgba(29, 78, 216, 0.3) 0%, rgba(15, 23, 42, 1) 100%)
+              radial-gradient(ellipse at top left, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
+              linear-gradient(to bottom right, #0f172a, #1e293b, #1e3a8a)
             `,
+            backgroundAttachment: 'fixed'
           }}
         >
-          <div className="text-center animate-pulse">
-            <h1 className="text-5xl font-bold text-white mb-4">Welcome to NVCCZ</h1>
-            <p className="text-xl text-blue-200">Loading your experience...</p>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div 
-        className={`flex flex-col items-center justify-start min-h-screen p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
-        style={{ 
-          background: `
-            radial-gradient(ellipse at top left, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
-            radial-gradient(ellipse at bottom right, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
-            linear-gradient(to bottom right, #0f172a, #1e293b, #1e3a8a)
-          `,
-          backgroundAttachment: 'fixed'
-        }}
-      >
         {/* Profile Menu */}
         <ProfileMenu />
         
@@ -359,6 +361,7 @@ export default function Home() {
           </div>
         </Tabs>
       </div>
-    </>
+      </>
+    </ChatbotProvider>
   );
 }
