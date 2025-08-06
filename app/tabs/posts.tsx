@@ -47,6 +47,29 @@ interface PostsData {
   success: boolean;
   data: Post[];
 }
+interface Role {
+  id: string;
+  name: string;
+  description: string;
+  permissions: {
+    name: string;
+    value: boolean;
+  }[];
+}
+
+interface UserResponse {
+  success: boolean;
+  data: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    role: Role;
+  };
+}
+
 
 const Posts = () => {
   const [posts, setPosts] = useState<PostsData | null>(null);
@@ -55,6 +78,10 @@ const Posts = () => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -84,7 +111,48 @@ const Posts = () => {
       }
     };
 
+    const fetchUserRole = async () => {
+      try {
+        setUserLoading(true);
+        const token = sessionStorage.getItem('token');
+        const userId = sessionStorage.getItem('userID');
+        
+        if (!token) {
+          setAuthError('Authentication token not found');
+          return;
+        }
+        
+        if (!userId) {
+          setAuthError('User ID not found in session');
+          return;
+        }
+
+        const response = await fetch(`https://nvccz-pi.vercel.app/api/users/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
+
+        const data: UserResponse = await response.json();
+        
+        if (data.success && data.data.role?.name === 'admin') {
+          setIsAdmin(true);
+        }
+      } catch (err) {
+        console.error('Error fetching user role:', err);
+        setAuthError(err instanceof Error ? err.message : 'Failed to verify user permissions');
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
     fetchPosts();
+    fetchUserRole();
   }, []);
 
   const handleReplySubmit = async (postId: string) => {
@@ -280,6 +348,114 @@ const Posts = () => {
   if (!posts || !posts.success || posts.data.length === 0) {
     return (
       <div className="p-6 text-center text-gray-400 max-w-2xl mx-auto">
+         <div className="flex justify-end">
+        {authError ? (
+          <div className="text-red-400 text-sm">{authError}</div>
+        ) : (
+          !userLoading && isAdmin && (
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Post
+            </button>
+          )
+        )}
+      </div>
+            {/* Create Post Modal */}
+            {isCreateModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div 
+            className="bg-slate-800 rounded-xl p-6 w-full max-w-2xl"
+            style={{
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(55, 65, 81, 0.4)'
+            }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Create New Post</h2>
+              <button 
+                onClick={() => setIsCreateModalOpen(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={newPost.title}
+                  onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                  className="w-full p-3 rounded-lg bg-gray-700 text-gray-300 border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  placeholder="Post title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Content
+                </label>
+                <textarea
+                  value={newPost.content}
+                  onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                  className="w-full p-3 rounded-lg bg-gray-700 text-gray-300 border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  rows={5}
+                  placeholder="Write your post content..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Expiration Date (optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={newPost.expiresAt}
+                  onChange={(e) => setNewPost({...newPost, expiresAt: e.target.value})}
+                  className="w-full p-3 rounded-lg bg-gray-700 text-gray-300 border border-gray-600 focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              {error && (
+                <div className="p-2 bg-red-900/20 text-red-300 rounded-lg">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                  disabled={isCreating}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreatePost}
+                  className="px-4 py-2 text-sm text-white rounded-lg bg-blue-600 hover:bg-blue-500 transition flex items-center"
+                  disabled={isCreating || !newPost.title.trim() || !newPost.content.trim()}
+                >
+                  {isCreating ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Creating...
+                    </>
+                  ) : 'Create Post'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
         No posts available
       </div>
     );
@@ -289,13 +465,19 @@ const Posts = () => {
     <div className="space-y-6 max-w-2xl mx-auto">
       {/* Create Post Button */}
       <div className="flex justify-end">
-        <button
-          onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create Post
-        </button>
+        {authError ? (
+          <div className="text-red-400 text-sm">{authError}</div>
+        ) : (
+          !userLoading && isAdmin && (
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Post
+            </button>
+          )
+        )}
       </div>
 
       {/* Create Post Modal */}

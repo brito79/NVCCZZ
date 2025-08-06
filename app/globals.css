@@ -120,3 +120,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-navy-600 {
+    color: #1e3a8a;
+  }
+  .text-navy-700 {
+    color: #1d4ed8;
+  }
+  .text-navy-800 {
+    color: #1e40af;
+  }
+  .bg-navy-50 {
+    background-color: #f0f4ff;
+  }
+  .hover\:bg-navy-600:hover {
+    background-color: #1e3a8a;
+  }
+  .from-navy-600 {
+    --tw-gradient-from: #1e3a8a;
+    --tw-gradient-to: rgba(30, 58, 138, 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .to-navy-800 {
+    --tw-gradient-to: #1e40af;
+  }
+}
