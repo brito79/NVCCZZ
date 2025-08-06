@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { FiMenu, FiX, FiHome, FiDollarSign, FiFileText, FiUsers, FiSettings, FiChevronDown, FiChevronRight, FiTool } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiDollarSign, FiFileText,  FiChevronDown,  FiTool } from 'react-icons/fi';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
