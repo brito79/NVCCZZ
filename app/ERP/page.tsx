@@ -299,7 +299,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
         </nav>
   
         {/* Beautiful Home Button at Bottom */}
-        {/* <div className="p-4 border-t border-gray-200/30">
+        <div className="p-4 border-t border-gray-200/30">
           <Link href="/">
             <div className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200
               ${isActive('/') 
@@ -307,9 +307,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
                 : 'text-gray-600 hover:bg-white/90 hover:text-navy-600 hover:shadow-xs hover:translate-x-1'}
               ${isMenuCollapsed ? 'justify-center' : 'justify-between'}`}
             >
-              <div className="flex items-center" onClick={() => {
-                router.push('/')
-              }}>
+              <div className="flex items-center" >
                 <span className={`transition-all duration-200 ${isActive('/') ? 'text-navy-600 scale-110' : 'text-gray-500 hover:scale-110'}`}>
                   <FiHome size={20} />
                 </span>
@@ -321,7 +319,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </Link>
-        </div> */}
+        </div>
       </div>
   
       {/* Main Content Area */}
