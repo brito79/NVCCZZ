@@ -16,67 +16,82 @@ import ERP from "../page";
 import dynamic from 'next/dynamic';
 
 type ApexOptions = {
-    chart: {
-      type: 'pie' | 'bar' | 'area' | 'line';
-      width?: number | string;
-      height?: number | string;
-      stacked?: boolean;
-      toolbar?: {
-        show: boolean;
-      };
-      animations?: {
-        enabled: boolean;
-        easing?: string;
-        dynamicAnimation?: {
-          speed?: number;
-        };
-      };
+  chart: {
+    type: 'pie' | 'donut' | 'bar' | 'area' | 'line';
+    width?: number | string;
+    height?: number | string;
+    stacked?: boolean;
+    toolbar?: {
+      show: boolean;
     };
-    labels?: string[];
-    colors?: string[];
-    legend?: {
-      position: 'top' | 'right' | 'bottom' | 'left';
-    };
-    responsive?: {
-      breakpoint: number;
-      options: {
-        chart?: {
-          width?: number | string;
-        };
-        legend?: {
-          position?: 'top' | 'right' | 'bottom' | 'left';
-        };
-        xaxis?: {
-          labels?: {
-            formatter?: (value: string) => string;
-          };
-        };
-      };
-    }[];
-    dataLabels?: {
+    animations?: {
       enabled: boolean;
-    };
-    stroke?: {
-      curve: 'smooth' | 'straight' | 'stepline';
-      width: number;
-    };
-    xaxis?: {
-      categories?: string[];
-      labels?: {
-        formatter?: (value: string) => string;
-      };
-    };
-    yaxis?: {
-      labels?: {
-        formatter?: (value: number) => string;
-      };
-    };
-    tooltip?: {
-      y?: {
-        formatter?: (value: number) => string;
+      easing?: string;
+      dynamicAnimation?: {
+        speed?: number;
       };
     };
   };
+  labels?: string[];
+  colors?: string[];
+  legend?: {
+    position: 'top' | 'right' | 'bottom' | 'left';
+  };
+  responsive?: {
+    breakpoint: number;
+    options: {
+      chart?: {
+        width?: number | string;
+      };
+      legend?: {
+        position?: 'top' | 'right' | 'bottom' | 'left';
+      };
+      xaxis?: {
+        labels?: {
+          formatter?: (value: string) => string;
+        };
+      };
+    };
+  }[];
+  dataLabels?: {
+    enabled: boolean;
+  };
+  plotOptions?: {
+    pie?: {
+      donut?: {
+        size?: string;
+        labels?: {
+          show?: boolean;
+          total?: {
+            show?: boolean;
+            label?: string;
+            formatter?: () => string;
+          };
+        };
+      };
+    };
+  };
+  stroke?: {
+    curve: 'smooth' | 'straight' | 'stepline';
+    width: number;
+  };
+  xaxis?: {
+    categories?: string[];
+    labels?: {
+      formatter?: (value: string) => string;
+    };
+  };
+  yaxis?: {
+    labels?: {
+      formatter?: (value: number) => string;
+    };
+  };
+  tooltip?: {
+    y?: {
+      formatter?: (value: number) => string;
+    };
+  };
+};
 
 type ApexSeries = {
   name?: string;
@@ -343,7 +358,7 @@ const Dashboard = () => {
 
   const revenueByCategoryOptions: ApexOptions = {
     chart: {
-      type: 'pie',
+      type: 'donut',  // Changed from 'pie' to 'donut'
       animations: {
         enabled: true,
         easing: 'easeinout',
@@ -359,6 +374,21 @@ const Dashboard = () => {
     },
     dataLabels: {
       enabled: true
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '65%',
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: 'Total Revenue',
+              formatter: () => formatCurrency(totalRevenue)
+            }
+          }
+        }
+      }
     },
     responsive: [{
       breakpoint: 480,
@@ -377,7 +407,7 @@ const Dashboard = () => {
 
   const expenseByCategoryOptions: ApexOptions = {
     chart: {
-      type: 'pie',
+      type: 'donut',
       animations: {
         enabled: true,
         easing: 'easeinout',
@@ -394,6 +424,21 @@ const Dashboard = () => {
     dataLabels: {
       enabled: true
     },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '65%',
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: 'Total Expenses',
+              formatter: () => formatCurrency(totalExpense)
+            }
+          }
+        }
+      }
+    },
     responsive: [{
       breakpoint: 480,
       options: {
@@ -406,7 +451,6 @@ const Dashboard = () => {
       }
     }]
   };
-
   const expenseByCategorySeries: number[] = expenses.map(exp => Math.abs(exp.balance));
 
   const monthlyTrendsOptions: ApexOptions = {
@@ -586,7 +630,7 @@ const Dashboard = () => {
                 <Chart
                   options={revenueByCategoryOptions}
                   series={revenueByCategorySeries}
-                  type="pie"
+                  type="donut"
                   height="100%"
                   width="100%"
                 />
@@ -607,13 +651,13 @@ const Dashboard = () => {
             </h2>
             <div className="h-80">
               {expenseByCategorySeries.length > 0 ? (
-                <Chart
-                  options={expenseByCategoryOptions}
-                  series={expenseByCategorySeries}
-                  type="pie"
-                  height="100%"
-                  width="100%"
-                />
+                    <Chart
+                    options={expenseByCategoryOptions}
+                    series={expenseByCategorySeries}
+                    type="donut"  // Changed from "pie" to "donut"
+                    height="100%"
+                    width="100%"
+                  />
               ) : (
                 <div className="flex justify-center items-center h-full">
                   No expense data available
