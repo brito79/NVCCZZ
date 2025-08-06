@@ -149,6 +149,13 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
       path: '/ERP/Tools',
       adminOnly: true // Only admins can access tools
     },
+    {
+      id: 'Home',
+      title: 'Home',
+      icon: <FiHome className="shrink-0" />,
+      path: '/',
+      adminOnly: false // Only admins can access tools
+    },
   ];
 
   // Filter menu items based on admin status
@@ -297,29 +304,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
             </div>
           ))}
         </nav>
-  
-        {/* Beautiful Home Button at Bottom */}
-        <div className="p-4 border-t border-gray-200/30">
-        
-            <div className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200
-              ${isActive('/') 
-                ? 'bg-white text-navy-700 font-medium shadow-sm border border-gray-200/30' 
-                : 'text-gray-600 hover:bg-white/90 hover:text-navy-600 hover:shadow-xs hover:translate-x-1'}
-              ${isMenuCollapsed ? 'justify-center' : 'justify-between'}`}
-            >
-              <div className="flex items-center" >
-                <span className={`transition-all duration-200 ${isActive('/') ? 'text-navy-600 scale-110' : 'text-gray-500 hover:scale-110'}`}>
-                  <FiHome size={20} />
-                </span>
-                {!isMenuCollapsed && (
-                  <span className="ml-3 font-light tracking-wide transition-all duration-200 hover:font-normal">
-                    Home
-                  </span>
-                )}
-              </div>
-            </div>
 
-        </div>
       </div>
   
       {/* Main Content Area */}
