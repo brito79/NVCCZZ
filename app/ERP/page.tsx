@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FiMenu, FiX, FiHome, FiDollarSign, FiFileText, FiUsers, FiSettings, FiChevronDown, FiChevronRight, FiTool } from 'react-icons/fi';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 // Add these interfaces for role checking
 interface Role {
@@ -47,7 +47,6 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   const [expandedMenuItems, setExpandedMenuItems] = useState<string[]>([]);
   const pathname = usePathname();
-  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLoading, setUserLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -205,7 +204,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
       <div 
         className={`backdrop-blur-lg border-r border-gray-200/30 transition-all duration-300 ease-in-out shadow-xl
           bg-gradient-to-b from-white/95 via-navy-50/80 to-white/95
-          ${isMenuCollapsed ? 'w-20' : 'w-64'} flex flex-col`}
+          ${isMenuCollapsed ? 'w-20' : 'w-64'}`}
       >
         {/* Sidebar Header */}
         <div className="p-4 flex items-center justify-between border-b border-gray-200/30">
@@ -223,7 +222,7 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         {/* Navigation Menu */}
-        <nav className="mt-6 px-2 flex-1">
+        <nav className="mt-6 px-2">
           {filteredMenuItems.map((item) => (
             <div key={item.id} className="mb-1 relative group">
               {item.path && !item.subItems ? (
@@ -297,24 +296,6 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
             </div>
           ))}
         </nav>
-
-        {/* Home Button at the bottom */}
-        <div className="p-4 border-t border-gray-200/30">
-          <button
-            onClick={() => router.push('/')}
-            className={`w-full flex items-center justify-center p-3 rounded-lg transition-all duration-300
-              bg-gradient-to-r from-navy-600/10 to-navy-800/10 hover:from-navy-600/20 hover:to-navy-800/20
-              text-navy-700 hover:text-white hover:shadow-lg hover:scale-105 group relative overflow-hidden`}
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-navy-600 to-navy-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="relative z-10 flex items-center">
-              <FiHome className="shrink-0" />
-              {!isMenuCollapsed && <span className="ml-3 font-light tracking-wide">Return to Home</span>}
-            </span>
-            {/* Glow effect on hover */}
-            <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 group-hover:animate-pulse transition-opacity duration-300"></span>
-          </button>
-        </div>
       </div>
 
       {/* Main Content Area */}
