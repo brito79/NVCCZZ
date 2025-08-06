@@ -1,3 +1,7 @@
+'use server'
+
+import {API_BASE_URL} from '@/lib/constants';
+
 export interface TopGainer {
   symbol: string;
   value: number;
@@ -15,7 +19,7 @@ export interface TopGainersResponse {
   count: number;
 }
 
-const API_BASE_URL = "https://73bd1d484a1c.ngrok-free.app";
+
 
 export async function fetchTopGainers(): Promise<{
   success: boolean;
@@ -45,9 +49,9 @@ export async function fetchTopGainers(): Promise<{
       throw new Error("No data received from API");
     }
 
-    if (!jsonData.top_gainers || !Array.isArray(jsonData.top_gainers)) {
-      throw new Error("Invalid data format: top_gainers missing or not an array");
-    }
+    // if (!jsonData.top_gainers || !Array.isArray(jsonData.top_gainers)) {
+    //   throw new Error("Invalid data format: top_gainers missing or not an array");
+    // }
 
     console.log(`Received ${jsonData.top_gainers.length} top gainers`);
 

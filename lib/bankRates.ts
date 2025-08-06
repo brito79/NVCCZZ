@@ -1,14 +1,15 @@
 // lib/bankRates.ts
 
 import { BankRatesResponse } from "@/types.db";
+import { API_BASE_URL } from "./constants";
 
 
 
-const API_URL = "https://73bd1d484a1c.ngrok-free.app/api/rbz/exchange-rates";
+
 
 export async function fetchBankRates(): Promise<{ success: boolean; data?: BankRatesResponse; error?: string }> {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch(`${API_BASE_URL}/api/rbz/exchange-rates`);
 
     if (!res.ok) {
       throw new Error(`API returned ${res.status}`);

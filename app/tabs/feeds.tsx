@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Search, TrendingUp, TrendingDown, DollarSign, Newspaper, BarChart3, Globe, Filter, RefreshCw, MapPin, Building2, Calendar } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, DollarSign, Newspaper, BarChart3, Globe, Filter, MapPin, Building2, Calendar } from 'lucide-react';
 import useSWR from 'swr';
 import { FeedItem, ForexData, BankRatesResponse } from '@/types.db';
 import { ZW } from 'country-flag-icons/react/3x2';
@@ -9,7 +9,7 @@ import { RateCard } from '@/components/rss-feeds/RateCard';
 import { BankRatesCard } from '@/components/rss-feeds/BankRatesCard';
 import { FeedCard } from '@/components/rss-feeds/FeedCard';
 import { categories, isFinancialOrEconomic, categorizeByRegion } from '@/utils/feedUtils';
-import ZimFinancialData from '@/components/ZimFinancialData';
+import ZimFinancialData from '@/components/MenuAllFinancialData';
 import FloatingRBZData from '@/components/rss-feeds/FloatingRBZData';
 
 const fetcher = async (url: string) => await fetch(url).then(res => res.json());
@@ -23,7 +23,6 @@ const FeedPage = () => {
     
     const [selectedCategory, setSelectedCategory] = useState('zimbabwean');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -49,14 +48,6 @@ const FeedPage = () => {
     const matchesSearch = feed.title.toLowerCase().includes(searchTerm.toLowerCase()) || feed.contentSnippet?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
-
-  const refreshFeeds = () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  };
 
   // Get dynamic rates with fallbacks
   const getRatesData = () => {
@@ -111,7 +102,7 @@ const FeedPage = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-gray-800/30 backdrop-blur-sm border-b border-gray-700">
+      <header className="bg-gray-800/30 backdrop-blur-sm border-b border-gray-700 mb-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -120,27 +111,34 @@ const FeedPage = () => {
               </div>
               <h1 className="ml-3 text-xl font-bold text-white">NVCCZ Financial Feeds</h1>
             </div>
-            <button 
-              onClick={refreshFeeds}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-              disabled={isLoading}
+            <a 
+              href="https://nvccz-performance-management1.vercel.app/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-              <span>Refresh</span>
-            </button>
+              <Building2 className="w-4 h-4" />
+              <span className="font-medium">Perfomance Manager</span>
+            </a>
           </div>
-          <FloatingRBZData />
+          
         </div>
       </header>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      {/* RBZ Exchange Rates Banner */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-6 mt-6">
+        <FloatingRBZData />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <ZimFinancialData />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar - Rates */}
-          <div className="lg:col-span-1 space-y-6">
-            <BankRatesCard data={bankRatesData} isLoading={bankRatesLoading} />
+          <div className="lg:col-span-1 space-y-6 max-w-sm">
+            {/* <BankRatesCard data={bankRatesData} isLoading={bankRatesLoading} /> */}
             <RateCard title="Cryptocurrency" data={getRatesData().crypto} type="crypto" isLoading={cryptoLoading} />
             <RateCard title="Forex Rates" data={getRatesData().forex} type="forex" isLoading={forexLoading} />
           </div>

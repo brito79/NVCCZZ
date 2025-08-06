@@ -1,17 +1,12 @@
-// lib/zse.ts
+'use server';
+
+import { API_BASE_URL } from "@/lib/constants";
 
 export type ZseMarketActivity = {
   trades: number;
-  turnover: number;
   market_cap: number;
   foreign_buys: number;
   foreign_sells: number;
-  currencies: {
-    turnover: string;
-    market_cap: string;
-    foreign_buys: string;
-    foreign_sells: string;
-  };
 };
 
 export type ZseMarketActivityResponse = {
@@ -23,7 +18,7 @@ export type ZseMarketActivityResponse = {
   market_activity: ZseMarketActivity;
 };
 
-const API_BASE_URL = "https://40df335d36e1.ngrok-free.app";
+
 
 export async function fetchMarketActivity(): Promise<{
   success: boolean;
@@ -31,10 +26,11 @@ export async function fetchMarketActivity(): Promise<{
   error?: string;
 }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/zse/market-activity`, {
+    const response = await fetch(`${API_BASE_URL}/api/zse/market-activity`, {
       method: "GET",
       headers: {
         Accept: "application/json",
+        'ngrok-skip-browser-warning': 'true'
       },
     });
 
@@ -44,13 +40,16 @@ export async function fetchMarketActivity(): Promise<{
 
     const json = await response.json();
 
+    // ✅ Validate structure
     if (
       !json.market_activity ||
       typeof json.market_activity.trades !== "number" ||
-      typeof json.market_activity.turnover !== "number" ||
-      typeof json.market_activity.market_cap !== "number"
+      typeof json.market_activity.market_cap !== "number" ||
+      typeof json.market_activity.foreign_buys !== "number" ||
+      typeof json.market_activity.foreign_sells !== "number" ||
+      typeof json.date !== "string"
     ) {
-      throw new Error("Invalid market activity format from API");
+      throw new Error("Invalid market activity data structure");
     }
 
     const structuredData: ZseMarketActivityResponse = {
@@ -64,7 +63,7 @@ export async function fetchMarketActivity(): Promise<{
 
     return { success: true, data: structuredData };
   } catch (error: any) {
-    console.error("Error fetching ZSE market activity:", error);
+    console.error("Error fetching market activity:", error);
     return {
       success: false,
       error: error.message || "An unknown error occurred",

@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { ArrowUp, ArrowDown, RefreshCw, TrendingDown, AlertCircle } from 'lucide-react';
-import { fetchTopLosers, ZseLoser, ZseTopLosersResponse } from '../../../lib/zse-top-loser';
+import TopLosersResponse, { fetchTopLosers, TopLoser } from '@/pages/api/zse-top-loser';
+
+
 
 interface ZSETopLosersProps {
   className?: string;
 }
 
 const ZSETopLosers: React.FC<ZSETopLosersProps> = ({ className = '' }) => {
-  const [data, setData] = useState<ZseTopLosersResponse | null>(null);
+  const [data, setData] = useState<TopLosersResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -192,7 +194,7 @@ const ZSETopLosers: React.FC<ZSETopLosersProps> = ({ className = '' }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/50">
-            {data.top_losers.map((stock: ZseLoser, index: number) => (
+            {data.top_losers.map((stock: TopLoser, index: number) => (
               <tr 
                 key={`${stock.symbol}-${index}`}
                 className="hover:bg-gray-700/20 transition-colors"

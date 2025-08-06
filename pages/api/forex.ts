@@ -1,3 +1,5 @@
+'use server';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getForexRates } from '@/lib/forex'; 
 

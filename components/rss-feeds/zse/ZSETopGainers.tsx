@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ArrowUp, ArrowDown, RefreshCw, TrendingUp, AlertCircle } from 'lucide-react';
-import { fetchTopGainers, TopGainer, TopGainersResponse } from '@/lib/zse-top-gainers';
+import { fetchTopGainers, TopGainer, TopGainersResponse } from '@/pages/api/zse-top-gainers';
 
 
 interface ZSETopGainersProps {
@@ -90,7 +90,7 @@ const ZSETopGainers: React.FC<ZSETopGainersProps> = ({ className = '' }) => {
       </div>
     );
   }
-  console.log()
+
 
   if (error) {
     return (

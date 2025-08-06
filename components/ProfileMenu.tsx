@@ -41,11 +41,11 @@ export default function ProfileMenu() {
             </a>
             
             <a
-              href="#"
+              href="https://nvccz-frontend.vercel.app/ERP/Dashboard" target="_blank" rel="noopener noreferrer"
               className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
             >
               <LayoutDashboard className="mr-3 h-4 w-4" />
-              ERP Dashboard
+              Accounting
             </a>
             
 
