@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Search, TrendingUp, TrendingDown, DollarSign, Newspaper, BarChart3, Globe, Filter, MapPin, Building2, Calendar } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, DollarSign, Newspaper, BarChart3, Globe, Filter, RefreshCw, MapPin, Building2, Calendar } from 'lucide-react';
 import useSWR from 'swr';
 import { FeedItem, ForexData, BankRatesResponse } from '@/types.db';
 import { ZW } from 'country-flag-icons/react/3x2';
@@ -23,6 +23,7 @@ const FeedPage = () => {
     
     const [selectedCategory, setSelectedCategory] = useState('zimbabwean');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -48,6 +49,14 @@ const FeedPage = () => {
     const matchesSearch = feed.title.toLowerCase().includes(searchTerm.toLowerCase()) || feed.contentSnippet?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
+
+  const refreshFeeds = () => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  };
 
   // Get dynamic rates with fallbacks
   const getRatesData = () => {
@@ -111,15 +120,14 @@ const FeedPage = () => {
               </div>
               <h1 className="ml-3 text-xl font-bold text-white">NVCCZ Financial Feeds</h1>
             </div>
-            <a 
-              href="https://nvccz-performance-management1.vercel.app/" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            <button 
+              onClick={refreshFeeds}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              disabled={isLoading}
             >
-              <Building2 className="w-4 h-4" />
-              <span className="font-medium">Perfomance Manager</span>
-            </a>
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </button>
           </div>
           
         </div>
