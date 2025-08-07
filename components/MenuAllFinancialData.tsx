@@ -120,7 +120,7 @@ const ZimFinancialData = () => {
     },
     {
       id: 'tradingview-african',
-      title: 'TradingView (African)',
+      title: 'African Markets',
       fullTitle: 'TradingView African Markets',
       icon: BarChart3,
       description: 'African markets and regional indices',
@@ -130,7 +130,7 @@ const ZimFinancialData = () => {
     },
     {
       id: 'tradingview-global',
-      title: 'TradingView (Global)',
+      title: 'Global Markets',
       fullTitle: 'TradingView Global Indices',
       icon: Globe,
       description: 'International markets and global indices',
