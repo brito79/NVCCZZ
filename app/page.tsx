@@ -212,7 +212,7 @@ export default function Home() {
         
         <Tabs 
           defaultValue="feed" 
-          className="w-full max-w-[900px]"
+          className="w-full max-w-[90%]"
           onValueChange={(value) => setCurrentTab(value)}
         >
           <TabsList className="grid w-full grid-cols-4 gap-2 p-2 rounded-xl mb-8" style={{
