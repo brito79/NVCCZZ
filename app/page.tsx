@@ -1,6 +1,7 @@
 'use client'
 
 import ProfileMenu from "@/components/ProfileMenu";
+import ThemeToggle from "@/components/ThemeToggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -223,8 +224,14 @@ export default function Home() {
               backgroundAttachment: 'fixed'
             }}
           >
-            {/* Profile Menu */}
-            <ProfileMenu />
+            {/* Top-right controls (sticky) */}
+            <div className="w-full sticky top-4 z-40 flex items-center justify-end gap-3">
+              <div className="rounded-xl border border-slate-700/50 bg-[rgba(30,41,59,0.6)] backdrop-blur px-3 py-2 shadow-xl flex items-center gap-3">
+              {/* <ThemeToggle /> */}
+                <div className="h-5 w-px bg-slate-600/60" />
+                <ProfileMenu />
+              </div>
+            </div>
             
             <Tabs 
               defaultValue="feed" 
