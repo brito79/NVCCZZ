@@ -1,5 +1,5 @@
 // app/ERP/page.tsx
-import ERP from "./Layout";
+import ERP from "./layout";
 
 export default function ERPRootPage() {
   return (
