@@ -1,5 +1,10 @@
-export default ERPhome {
+// app/ERP/page.tsx
+import ERP from "@/components/ERP/Layout";
 
-return (<></>);
-  
+export default function ERPRootPage() {
+  return (
+    <ERP>
+      <p>Placeholder</p>
+    </ERP>
+  );
 }
