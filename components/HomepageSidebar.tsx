@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { 
   FaBook, 
   FaChartLine,
   FaChevronLeft,
   FaChevronRight,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 
 // Navigation items - only Accounting and Performance Management
@@ -15,7 +17,9 @@ const NAV_ITEMS = [
     icon: FaBook, 
     isActive: false, 
     type: 'single',
-    description: 'Financial Reports'
+    description: 'Financial Reports',
+    href: '/ERP/Dashboard',
+    isExternal: false
   },
   { 
     id: 'performance', 
@@ -23,7 +27,9 @@ const NAV_ITEMS = [
     icon: FaChartLine, 
     isActive: false, 
     type: 'single',
-    description: 'Analytics & KPIs'
+    description: 'Analytics & KPIs',
+    href: 'https://nvccz-performance-management1.vercel.app/',
+    isExternal: true
   },
 ];
 
@@ -33,6 +39,10 @@ export default function HomepageSidebar() {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleExternalClick = (href: string) => {
+    window.open(href, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -81,6 +91,7 @@ export default function HomepageSidebar() {
           </motion.div>
         </motion.button>
       </div>
+
       {/* Navigation Section */}
       <div className="flex-1 px-4 py-6">
         <nav className="space-y-2">
@@ -101,37 +112,84 @@ export default function HomepageSidebar() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.25 }}
-                    className="group relative flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-200 text-slate-300 hover:bg-slate-800/50 border-l-4 border-transparent hover:border-l-4 hover:border-blue-500"
                   >
-                    {/* Icon */}
-                    <div className="flex-shrink-0">
-                      <item.icon 
-                        className="text-blue-400 group-hover:text-blue-300"
-                        size={18} 
-                      />
-                    </div>
-                    
-                    {/* Text Content */}
-                    <div className="min-w-0 flex-1">
-                      <span className="font-medium text-slate-200 group-hover:text-white">
-                        {item.label}
-                      </span>
-                    </div>
+                    {item.isExternal ? (
+                      <button
+                        onClick={() => handleExternalClick(item.href)}
+                        className="group relative flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-200 text-slate-300 hover:bg-slate-800/50 border-l-4 border-transparent hover:border-l-4 hover:border-blue-500 w-full text-left"
+                      >
+                        {/* Icon */}
+                        <div className="flex-shrink-0">
+                          <item.icon 
+                            className="text-blue-400 group-hover:text-blue-300"
+                            size={18} 
+                          />
+                        </div>
+                        
+                        {/* Text Content */}
+                        <div className="min-w-0 flex-1 flex items-center justify-between">
+                          <span className="font-medium text-slate-200 group-hover:text-white">
+                            {item.label}
+                          </span>
+                          <FaExternalLinkAlt 
+                            className="text-slate-500 group-hover:text-blue-300 transition-colors"
+                            size={12}
+                          />
+                        </div>
+                      </button>
+                    ) : (
+                      <Link href={item.href} className="block">
+                        <div className="group relative flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-200 text-slate-300 hover:bg-slate-800/50 border-l-4 border-transparent hover:border-l-4 hover:border-blue-500">
+                          {/* Icon */}
+                          <div className="flex-shrink-0">
+                            <item.icon 
+                              className="text-blue-400 group-hover:text-blue-300"
+                              size={18} 
+                            />
+                          </div>
+                          
+                          {/* Text Content */}
+                          <div className="min-w-0 flex-1">
+                            <span className="font-medium text-slate-200 group-hover:text-white">
+                              {item.label}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
                   </motion.div>
                 ) : (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="group relative p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800/50"
+                    className="group relative"
                     title={item.label}
                   >
-                    <div className="flex items-center justify-center">
-                      <item.icon 
-                        className="text-blue-400 group-hover:text-blue-300"
-                        size={20} 
-                      />
-                    </div>
+                    {item.isExternal ? (
+                      <button
+                        onClick={() => handleExternalClick(item.href)}
+                        className="group relative p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800/50 w-full"
+                      >
+                        <div className="flex items-center justify-center">
+                          <item.icon 
+                            className="text-blue-400 group-hover:text-blue-300"
+                            size={20} 
+                          />
+                        </div>
+                      </button>
+                    ) : (
+                      <Link href={item.href}>
+                        <div className="group relative p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800/50">
+                          <div className="flex items-center justify-center">
+                            <item.icon 
+                              className="text-blue-400 group-hover:text-blue-300"
+                              size={20} 
+                            />
+                          </div>
+                        </div>
+                      </Link>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
