@@ -1,6 +1,4 @@
-
-
-"use client";
+  "use client";
 
 import { useState, useEffect } from 'react';
 import { FiMenu, FiX, FiHome, FiDollarSign, FiFileText,  FiChevronDown,  FiTool } from 'react-icons/fi';
