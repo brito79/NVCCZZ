@@ -123,7 +123,7 @@ export default function ProfileMenu() {
               className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white"
             >
               <Building2 className="mr-3 h-4 w-4" />
-              Organization
+              Organization Settings
             </a>
             
             <a

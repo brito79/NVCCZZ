@@ -146,7 +146,7 @@ const FloatingRBZData = () => {
   if (!currentRate) return null;
 
   return (
-    <div className="fixed top-20 left-0 right-0 z-40 pointer-events-none">
+    <div className="fixed top-20 left-0 right-0 z-40 pointer-events-none max-w-8xl">
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-900/80 via-blue-800/80 to-blue-900/80 backdrop-blur-md border-y border-blue-600/30 shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/5 to-transparent animate-pulse"></div>
         
