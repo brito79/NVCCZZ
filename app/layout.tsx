@@ -51,7 +51,7 @@ export default function RootLayout({
       <head>
         {/* Base color; updated at runtime by ThemeScript */}
         <meta name="theme-color" content="#ffffff" />
-        <ThemeScript />
+        {/* <ThemeScript /> */}
       </head>
       <body className="antialiased">
         {children}

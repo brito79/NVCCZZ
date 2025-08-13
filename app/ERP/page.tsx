@@ -45,7 +45,7 @@ type MenuItem = {
   }[];
 };
 
-const ERP = ({ children }: { children: React.ReactNode }) => {
+const ERP: React.FC<ERPProps> = ({ children }) => {
   const router = useRouter();
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
   const [expandedMenuItems, setExpandedMenuItems] = useState<string[]>([]);
