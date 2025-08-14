@@ -1,8 +1,3 @@
-* {
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-       "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-}
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -86,27 +81,10 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  --bg: #ffffff;
-  --fg: #0b1220;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --accent: #2563eb;
 
-  /* Help the browser style built-ins (form controls, etc.) */
-  color-scheme: light;
 }
 
-:root[data-theme="dark"] {
-  /* Dark */
-  --bg: #0b1220;
-  --fg: #e5e7eb;
-  --muted: #9ca3af;
-  --border: #1f2937;
-  --accent: #60a5fa;
-  color-scheme: dark;
-}
 
-html, body { background: var(--bg); color: var(--fg); }
 
 @media (prefers-reduced-motion: no-preference) {
   html { transition: background-color .2s, color .2s; }

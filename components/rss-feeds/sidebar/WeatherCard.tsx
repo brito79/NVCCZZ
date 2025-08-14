@@ -190,7 +190,7 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 }}
-              className="text-3xl font-black text-white drop-shadow-lg bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent"
+              className="text-3xl font-black drop-shadow-lg bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent"
             >
               {Math.round(view.tempC)}°
             </motion.div>
