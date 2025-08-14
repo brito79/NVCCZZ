@@ -1,27 +1,32 @@
-//@ts-nocheck
+// @ts-nocheck
 "use client";
 
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  FiMenu,
+  FiX,
+  FiHome,
+  FiDollarSign,
+  FiFileText,
+  FiChevronDown,
+  FiTool,
+} from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { useState, useEffect } from 'react';
-import { FiMenu, FiX, FiHome, FiDollarSign, FiFileText,  FiChevronDown,  FiTool } from 'react-icons/fi';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-
-// Add these interfaces for role checking
+// --- Types ------------------------------------------------------
 interface Role {
   id: string;
   name: string;
-  description: string;
-  permissions: {
-    name: string;
-    value: boolean;
-  }[];
+  description?: string;
+  permissions?: { name: string; value: boolean }[];
 }
-//  test
+
 interface UserResponse {
   success: boolean;
   data: {
-    id: string;ß
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -31,7 +36,7 @@ interface UserResponse {
   };
 }
 
-type MenuItem = {
+export type MenuItem = {
   id: string;
   title: string;
   icon: React.ReactNode;
@@ -45,286 +50,360 @@ type MenuItem = {
   }[];
 };
 
+// --- Component --------------------------------------------------
 const ERP = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
-  const [expandedMenuItems, setExpandedMenuItems] = useState<string[]>([]);
   const pathname = usePathname();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [userLoading, setUserLoading] = useState(true);
+
+  // UI state
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
+  const [expandedMenuItems, setExpandedMenuItems] = useState<string[]>([]);
+
+  // Auth/role state
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userLoading, setUserLoading] = useState<boolean>(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
-  // Fetch user role on component mount
+  // --- Persist collapse state ----------------------------------
   useEffect(() => {
+    const stored = localStorage.getItem("erp.sidebar.collapsed");
+    if (stored) setIsMenuCollapsed(stored === "1");
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("erp.sidebar.collapsed", isMenuCollapsed ? "1" : "0");
+  }, [isMenuCollapsed]);
+
+  // --- Fetch user role once ------------------------------------
+  useEffect(() => {
+    const controller = new AbortController();
+
     const fetchUserRole = async () => {
       try {
         setUserLoading(true);
-        const token = sessionStorage.getItem('token');
-        const userId = sessionStorage.getItem('userID');
-        
+        const token = sessionStorage.getItem("token");
+        const userId = sessionStorage.getItem("userID");
+
         if (!token) {
-          setAuthError('Authentication token not found');
+          setAuthError("Authentication token not found");
           return;
         }
-        
         if (!userId) {
-          setAuthError('User ID not found in session');
+          setAuthError("User ID not found in session");
           return;
         }
 
-        const response = await fetch(`https://nvccz-pi.vercel.app/api/users/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const res = await fetch(
+          `https://nvccz-pi.vercel.app/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            signal: controller.signal,
           }
-        });
+        );
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user data: ${response.status}`);
-        }
+        if (!res.ok) throw new Error(`Failed to fetch user data: ${res.status}`);
 
-        const data: UserResponse = await response.json();
-        
-        if (data.success && data.data.role?.name === 'admin') {
+        const data: UserResponse = await res.json();
+        if (data?.success && data?.data?.role?.name?.toLowerCase() === "admin") {
           setIsAdmin(true);
         }
-      } catch (err) {
-        console.error('Error fetching user role:', err);
-        setAuthError(err instanceof Error ? err.message : 'Failed to verify user permissions');
+      } catch (err: any) {
+        if (err?.name !== "AbortError") {
+          console.error("Error fetching user role:", err);
+          setAuthError(err instanceof Error ? err.message : "Failed to verify user permissions");
+        }
       } finally {
         setUserLoading(false);
       }
     };
 
     fetchUserRole();
+    return () => controller.abort();
   }, []);
 
-  // Define menu items with adminOnly flag where needed
-  const menuItems: MenuItem[] = [
-    {
-      id: 'Dashboard',
-      title: 'Dashboard',
-      icon: <FiHome className="shrink-0" />,
-      path: '/ERP/Dashboard',
-    },
-    {
-      id: 'Accounting',
-      title: 'Accounting',
-      icon: <FiDollarSign className="shrink-0" />,
-      subItems: [
-        {
-          id: 'Expenses',
-          title: 'Expenses',
-          path: '/ERP/Accounting/Expenses',
-        }
-      ],
-    },
-    {
-      id: 'invoices',
-      title: 'Invoices',
-      icon: <FiFileText className="shrink-0" />,
-      subItems: [
-        {
-          id: 'create-invoice',
-          title: 'Create Invoice',
-          path: '/ERP/Invoices/Create',
-          adminOnly: true // Only admins can create invoices
-        },
-        {
-          id: 'invoice-history',
-          title: 'Invoice History',
-          path: '/ERP/Invoices/History',
-        },
-      ],
-    },
-    {
-      id: 'Reports',
-      title: 'Reports',
-      icon: <FiFileText className="shrink-0" />,
-      path: '/ERP/Reports',
-      adminOnly: true // Only admins can access reports
-    },
-    {
-      id: 'Tools',
-      title: 'Tools',
-      icon: <FiTool className="shrink-0" />,
-      path: '/ERP/Tools',
-      adminOnly: true // Only admins can access tools
-    },
-    {
-      id: 'Home',
-      title: 'Home',
-      icon: <FiHome className="shrink-0" />,
-      path: '/',
-      adminOnly: false // Only admins can access tools
-    },
-  ];
+  // --- Menu model ----------------------------------------------
+  const menuItems: MenuItem[] = useMemo(
+    () => [
+      {
+        id: "Dashboard",
+        title: "Dashboard",
+        icon: <FiHome className="shrink-0" />,
+        path: "/ERP/Dashboard",
+      },
+      {
+        id: "Accounting",
+        title: "Accounting",
+        icon: <FiDollarSign className="shrink-0" />,
+        subItems: [
+          { id: "Expenses", title: "Expenses", path: "/ERP/Accounting/Expenses" },
+          { id: "create-invoice", title: "Create Invoice", path: "/ERP/Invoices/Create", adminOnly: true },
+          { id: "invoice-history", title: "Invoice History", path: "/ERP/Invoices/History" },
+        ],
+      },
+      {
+        id: "Reports",
+        title: "Reports",
+        icon: <FiFileText className="shrink-0" />,
+        path: "/ERP/Reports",
+        adminOnly: true,
+      },
+      {
+        id: "Tools",
+        title: "Tools",
+        icon: <FiTool className="shrink-0" />,
+        path: "/ERP/Tools",
+        adminOnly: true,
+      },
+      {
+        id: "Home",
+        title: "Home",
+        icon: <FiHome className="shrink-0" />,
+        path: "/",
+      },
+    ],
+    []
+  );
 
-  // Filter menu items based on admin status
-  const filteredMenuItems = menuItems.filter(item => {
-    // Show all items if user is admin or item is not adminOnly
-    if (isAdmin || !item.adminOnly) {
-      // For items with subItems, also filter the subItems
-      if (item.subItems) {
-        return {
-          ...item,
-          subItems: item.subItems.filter(subItem => isAdmin || !subItem.adminOnly)
-        };
+  // --- Role-aware filtering (fixes original logic) --------------
+  const filteredMenuItems = useMemo(() => {
+    const filterItem = (item: MenuItem): MenuItem | null => {
+      if (item.adminOnly && !isAdmin) return null;
+      if (item.subItems?.length) {
+        const filteredSubs = item.subItems.filter((s) => (s.adminOnly ? isAdmin : true));
+        if (filteredSubs.length === 0) return null;
+        return { ...item, subItems: filteredSubs };
       }
-      return true;
-    }
-    return false;
-  }).map(item => {
-    // Ensure we return the item with filtered subItems
-    if (item.subItems) {
-      return {
-        ...item,
-        subItems: item.subItems.filter(subItem => isAdmin || !subItem.adminOnly)
-      };
-    }
-    return item;
-  }).filter(item => {
-    // Remove items that have no subItems left after filtering
-    if (item.subItems) {
-      return item.subItems.length > 0;
-    }
-    return true;
-  });
+      return item;
+    };
 
+    return menuItems
+      .map((i) => filterItem(i))
+      .filter((i): i is MenuItem => i !== null);
+  }, [menuItems, isAdmin]);
 
-  const toggleMenu = () => {
-    setIsMenuCollapsed(!isMenuCollapsed);
-  };
+  // --- Helpers --------------------------------------------------
+  const isActive = (path?: string) => !!path && (pathname === path || pathname.startsWith(`${path}/`));
 
   const toggleSubMenu = (menuId: string) => {
-    if (expandedMenuItems.includes(menuId)) {
-      setExpandedMenuItems(expandedMenuItems.filter(id => id !== menuId));
-    } else {
-      setExpandedMenuItems([...expandedMenuItems, menuId]);
-    }
+    setExpandedMenuItems((prev) =>
+      prev.includes(menuId) ? prev.filter((id) => id !== menuId) : [...prev, menuId]
+    );
   };
 
-  const isActive = (path: string) => {
-    return pathname === path || pathname.startsWith(`${path}/`);
-  };
+  // Auto-expand the group that contains the active route
+  useEffect(() => {
+    const toExpand = filteredMenuItems
+      .filter((i) => i.subItems?.some((s) => isActive(s.path)))
+      .map((i) => i.id);
+    if (toExpand.length) setExpandedMenuItems((prev) => Array.from(new Set([...prev, ...toExpand])));
+  }, [pathname, filteredMenuItems]);
 
+  // --- UI -------------------------------------------------------
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Modern Glass Sidebar with Navy Gradient */}
-      <div 
-        className={`backdrop-blur-lg border-r border-gray-200/30 transition-all duration-300 ease-in-out shadow-xl
-          bg-gradient-to-b from-white/95 via-navy-50/80 to-white/95
-          ${isMenuCollapsed ? 'w-20' : 'w-64'} flex flex-col`}
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Sidebar */}
+      <aside
+        className={`relative border-r border-slate-200/60 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 shadow-[0_8px_30px_rgb(2,6,23,0.06)] transition-[width] duration-300 ease-in-out ${
+          isMenuCollapsed ? "w-[4.75rem]" : "w-64"
+        } flex flex-col`}
       >
-        {/* Sidebar Header */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-200/30">
-          {!isMenuCollapsed && (
-            <h1 className="text-1xl font-light tracking-tight bg-gradient-to-r from-navy-600 to-navy-800 bg-clip-text text-transparent">
-              <span className="font-medium">NVCCZ</span> Accounting
-            </h1>
+        {/* Brand + Collapse */}
+        <div className="flex items-center justify-between px-3 py-3 border-b border-slate-200/60">
+          {!isMenuCollapsed ? (
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 shadow-sm" />
+              <div className="leading-tight">
+                <p className="text-sm font-semibold tracking-tight text-slate-800">NVCCZ</p>
+                <p className="text-[11px] text-slate-500 -mt-0.5">Accounting</p>
+              </div>
+            </div>
+          ) : (
+            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 shadow-sm" />
           )}
-          <button 
-            onClick={toggleMenu}
-            className="p-2 rounded-lg hover:bg-gray-100/50 text-gray-500 hover:text-navy-700 transition-all duration-200 hover:scale-105"
+
+          <button
+            aria-label={isMenuCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={() => setIsMenuCollapsed((v) => !v)}
+            className="p-2 rounded-lg hover:bg-slate-100 active:scale-95 transition"
           >
-            {isMenuCollapsed ? <FiMenu size={20} /> : <FiX size={20} />}
+            {isMenuCollapsed ? <FiMenu size={18} /> : <FiX size={18} />}
           </button>
         </div>
-  
-        {/* Navigation Menu */}
-        <nav className="mt-6 px-2 flex-1">
-          {filteredMenuItems.map((item) => (
-            <div key={item.id} className="mb-1 relative group">
-              {item.path && !item.subItems ? (
-                // Regular clickable menu item (Dashboard, Reports, Tools)
-                <Link href={item.path}>
-                  <div
-                    className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200
-                      ${isActive(item.path) 
-                        ? 'bg-white text-navy-700 font-medium shadow-sm border border-gray-200/30' 
-                        : 'text-gray-600 hover:bg-white/90 hover:text-navy-600 hover:shadow-xs hover:translate-x-1'}
-                      ${isMenuCollapsed ? 'justify-center' : 'justify-between'}`}
+
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-2 py-3">
+          {filteredMenuItems.map((item) => {
+            const activeTop = item.path && isActive(item.path);
+            const isGroupActive = item.subItems?.some((s) => isActive(s.path));
+            const expanded = expandedMenuItems.includes(item.id);
+
+            // Single-link item
+            if (item.path && !item.subItems) {
+              return (
+                <Link key={item.id} href={item.path} title={isMenuCollapsed ? item.title : undefined}>
+                  <motion.div
+                    whileHover={{ x: isMenuCollapsed ? 0 : 4 }}
+                    className={`group relative mb-1.5 flex items-center rounded-xl px-3 py-2 text-sm transition-all ${
+                      activeTop
+                        ? "bg-white shadow-sm ring-1 ring-slate-200 text-slate-900"
+                        : "text-slate-600 hover:bg-white/80 hover:shadow-sm"
+                    }`}
                   >
-                    <div className="flex items-center">
-                      <span className={`transition-all duration-200 ${isActive(item.path) ? 'text-navy-600 scale-110' : 'text-gray-500 hover:scale-110'}`}>
-                        {item.icon}
-                      </span>
-                      {!isMenuCollapsed && <span className="ml-3 font-light tracking-wide transition-all duration-200 group-hover:font-normal">{item.title}</span>}
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                // Dropdown menu item (Accounting, Invoices)
-                <div
-                  className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200
-                    ${isMenuCollapsed ? 'justify-center' : 'justify-between'}
-                    ${item.subItems?.some(subItem => isActive(subItem.path)) 
-                      ? 'text-navy-700' 
-                      : 'text-gray-600 hover:bg-white/90 hover:text-navy-600 hover:shadow-xs hover:translate-x-1'}`}
-                  onClick={() => item.subItems && toggleSubMenu(item.id)}
-                >
-                  <div className="flex items-center">
-                    <span className="transition-all duration-200 text-gray-500 hover:scale-110">
+                    <span className={`mr-3 grid h-8 w-8 place-items-center rounded-lg border ${
+                        activeTop
+                          ? "border-indigo-200 bg-indigo-50 text-indigo-600"
+                          : "border-slate-200 bg-white text-slate-500 group-hover:border-slate-300"
+                      }`}>
                       {item.icon}
                     </span>
-                    {!isMenuCollapsed && <span className="ml-3 font-light tracking-wide transition-all duration-200 group-hover:font-normal">{item.title}</span>}
-                  </div>
-                  {!isMenuCollapsed && item.subItems && (
-                    <span className={`text-gray-400 transition-all duration-200 ${expandedMenuItems.includes(item.id) ? 'rotate-180' : ''} hover:scale-125`}>
-                      <FiChevronDown size={16} />
+                    {!isMenuCollapsed && (
+                      <span className="truncate font-medium tracking-tight">{item.title}</span>
+                    )}
+
+                    {/* Active indicator */}
+                    {activeTop && (
+                      <motion.span
+                        layoutId="active-dot"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-indigo-500"
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            }
+
+            // Group item
+            return (
+              <div key={item.id} className="mb-1.5">
+                <button
+                  type="button"
+                  onClick={() => toggleSubMenu(item.id)}
+                  aria-expanded={expanded}
+                  className={`group relative flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors ${
+                    isGroupActive
+                      ? "bg-white shadow-sm ring-1 ring-slate-200 text-slate-900"
+                      : "text-slate-600 hover:bg-white/80 hover:shadow-sm"
+                  } ${isMenuCollapsed ? "justify-center" : "justify-between"}`}
+                  title={isMenuCollapsed ? item.title : undefined}
+                >
+                  <div className="flex items-center">
+                    <span className={`mr-3 grid h-8 w-8 place-items-center rounded-lg border ${
+                        isGroupActive
+                          ? "border-indigo-200 bg-indigo-50 text-indigo-600"
+                          : "border-slate-200 bg-white text-slate-500 group-hover:border-slate-300"
+                      }`}>
+                      {item.icon}
                     </span>
+                    {!isMenuCollapsed && (
+                      <span className="truncate font-medium tracking-tight">{item.title}</span>
+                    )}
+                  </div>
+                  {!isMenuCollapsed && (
+                    <FiChevronDown
+                      className={`transition-transform ${expanded ? "rotate-180" : "rotate-0"}`}
+                      size={16}
+                    />)
+                  }
+
+                  {isGroupActive && (
+                    <motion.span
+                      layoutId="active-dot"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-indigo-500"
+                    />
                   )}
-                </div>
-              )}
-              
-              {/* Animated bottom border */}
-              <div className={`absolute bottom-0 left-0 h-0.5 bg-navy-600 transition-all duration-300 ease-in-out 
-                ${isMenuCollapsed ? 'w-0' : 'w-full scale-x-0 group-hover:scale-x-100 origin-left'} 
-                ${item.path && isActive(item.path) ? 'scale-x-100' : ''}`} />
-  
-              {/* Submenu Items */}
-              {!isMenuCollapsed && item.subItems && expandedMenuItems.includes(item.id) && (
-                <div className="ml-8 mt-1 mb-2 space-y-1">
-                  {item.subItems.map((subItem) => (
-                    <Link href={subItem.path} key={subItem.id} className="relative group">
-                      <div
-                        className={`px-3 py-2 rounded-lg cursor-pointer text-sm transition-all duration-200
-                          ${isActive(subItem.path) 
-                            ? 'bg-white text-navy-700 font-normal shadow-xs border border-gray-200/20' 
-                            : 'text-gray-500 hover:bg-white/90 hover:text-navy-600 hover:translate-x-2 hover:shadow-xs'}`}
-                      >
-                        <span className="font-light tracking-wide transition-all duration-200 group-hover:font-normal">{subItem.title}</span>
-                        {/* Animated bottom border for subitems */}
-                        <div className={`absolute bottom-0 left-0 h-0.5 bg-navy-600 transition-all duration-300 ease-in-out 
-                          w-full scale-x-0 group-hover:scale-x-100 origin-left 
-                          ${isActive(subItem.path) ? 'scale-x-100' : ''}`} />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                </button>
+
+                {/* Submenu */}
+                <AnimatePresence initial={false}>
+                  {!isMenuCollapsed && expanded && item.subItems && (
+                    <motion.ul
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ type: "tween", duration: 0.2 }}
+                      className="ml-11 mt-1 space-y-1 overflow-hidden"
+                    >
+                      {item.subItems.map((sub) => {
+                        const active = isActive(sub.path);
+                        return (
+                          <li key={sub.id}>
+                            <Link href={sub.path} className="block">
+                              <motion.div
+                                whileHover={{ x: 6 }}
+                                className={`relative rounded-lg px-2 py-1.5 text-[13px] transition-all ${
+                                  active
+                                    ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-200"
+                                    : "text-slate-600 hover:bg-white/70"
+                                }`}
+                              >
+                                <span className="font-medium tracking-tight">{sub.title}</span>
+                                {active && (
+                                  <motion.span
+                                    layoutId="active-sub"
+                                    className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-r bg-indigo-500"
+                                  />
+                                )}
+                              </motion.div>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </nav>
 
-      </div>
-  
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-gray-200/50 p-4">
-          <h2 className="text-2xl font-light text-gray-800 tracking-tight">
-            {menuItems.find(item => item.path && isActive(item.path))?.title}
-            {menuItems.some(item => item.subItems?.some(sub => isActive(sub.path))) && 
-              ` / ${menuItems
-                .flatMap(item => item.subItems || [])
-                .find(subItem => isActive(subItem.path))?.title}`}
+        {/* Footer / Status */}
+        <div className="border-t border-slate-200/60 p-3 text-[11px] text-slate-500">
+          {userLoading ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-slate-300" /> Loading user…
+            </span>
+          ) : authError ? (
+            <span className="text-rose-600">{authError}</span>
+          ) : (
+            <span className="inline-flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              {isAdmin ? "Admin" : "Standard"} access
+            </span>
+          )}
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <section className="flex-1 overflow-auto">
+        <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-slate-200/60 bg-white/80 px-4 py-3 backdrop-blur-xl">
+          <h2 className="text-xl font-semibold tracking-tight text-slate-800">
+            {/* Breadcrumb-like header */}
+            {(() => {
+              const top = filteredMenuItems.find((i) => i.path && isActive(i.path));
+              const sub = filteredMenuItems.flatMap((i) => i.subItems || []).find((s) => isActive(s.path));
+              if (top) return top.title;
+              if (sub) {
+                const parent = filteredMenuItems.find((i) => i.subItems?.some((s) => s.id === sub.id));
+                return parent ? `${parent.title} / ${sub.title}` : sub.title;
+              }
+              return "";
+            })()}
           </h2>
+
+          {/* Quick collapse toggle for large screens */}
+          <button
+            onClick={() => setIsMenuCollapsed((v) => !v)}
+            className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 shadow-sm hover:bg-slate-50 active:scale-95"
+          >
+            {isMenuCollapsed ? <FiMenu /> : <FiX />} <span>Sidebar</span>
+          </button>
         </header>
-        
-        <main className="p-6 bg-gray-50/50 min-h-[calc(100vh-64px)]">
+
+        <main className="min-h-[calc(100vh-56px)] bg-gradient-to-b from-white to-slate-50 p-6">
           {children}
         </main>
-      </div>
+      </section>
     </div>
   );
 };
