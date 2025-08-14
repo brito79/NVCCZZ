@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Noto_Sans } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
-
+  
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700"],

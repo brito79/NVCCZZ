@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+
 import { 
   FaBook, 
   FaChartLine,
   FaChevronLeft,
   FaChevronRight,
-  FaExternalLinkAlt
 } from 'react-icons/fa';
 
 // Navigation items - only Accounting and Performance Management
