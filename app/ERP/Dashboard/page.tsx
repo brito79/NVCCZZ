@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -128,7 +128,7 @@ const TrendPill = ({ change }: { change: number }) => {
       }`}
     >
       {positive ? <FiTrendingUp className="h-3.5 w-3.5" /> : <FiTrendingDown className="h-3.5 w-3.5" />}
-      {Math.abs(change)}%
+      {Math.abs(change).toFixed(1)}%
     </span>
   );
 };
@@ -173,11 +173,30 @@ const KpiCard = ({
       </div>
       {/* subtle gradient accent */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-indigo-500/20 via-sky-400/20 to-emerald-500/20" />
-
       {/* hover shimmer */}
-      <div className="pointer-events-none absolute -inset-8 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" style={{background:'radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(59,130,246,.15), transparent 40%)'}} />
+      <div
+        className="pointer-events-none absolute -inset-8 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40"
+        style={{
+          background:
+            'radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(59,130,246,.15), transparent 40%)',
+        }}
+      />
     </motion.div>
   );
+};
+
+// ---- Helpers ---------------------------------------------------------------
+const pctChange = (current: number, previous: number) => {
+  if (!isFinite(previous) || previous === 0) return 0;
+  return ((current - previous) / Math.abs(previous)) * 100;
+};
+
+const lastTwo = <T extends Record<string, any>>(obj: T) => {
+  const keys = Object.keys(obj).sort(); // "YYYY-MM"
+  if (keys.length < 2) return null;
+  const prevKey = keys[keys.length - 2];
+  const currKey = keys[keys.length - 1];
+  return { prevKey, currKey };
 };
 
 // ---- Component -------------------------------------------------------------
@@ -193,12 +212,15 @@ const Dashboard = () => {
   const [cashBalance, setCashBalance] = useState(0);
   const [receivables, setReceivables] = useState(0);
   const [payables, setPayables] = useState(0);
-  const [monthlyData, setMonthlyData] = useState<{
-    month: string;
-    revenue: number;
-    expense: number;
-    profit: number;
-  }[]>([]);
+  const [monthlyData, setMonthlyData] = useState<
+    { month: string; revenue: number; expense: number; profit: number }[]
+  >([]);
+  const [changes, setChanges] = useState({
+    revenue: 0,
+    expense: 0,
+    profit: 0,
+    cash: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,6 +251,7 @@ const Dashboard = () => {
   const processDashboardData = (entries: JournalEntry[]) => {
     const accountMap = new Map<string, AccountSummary>();
     const monthlyTotals: Record<string, { revenue: number; expense: number }> = {};
+    const monthlyCashFlow: Record<string, number> = {}; // net cash flow by month
     let cash = 0;
     let receivablesTotal = 0;
     let payablesTotal = 0;
@@ -241,30 +264,36 @@ const Dashboard = () => {
       const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
         .padStart(2, '0')}`;
+
       if (!monthlyTotals[monthYear]) monthlyTotals[monthYear] = { revenue: 0, expense: 0 };
+      if (monthlyCashFlow[monthYear] == null) monthlyCashFlow[monthYear] = 0;
 
       entry.journalEntryLines.forEach((line) => {
         if (!line.chartOfAccount) return;
+        const name = line.chartOfAccount.accountName || '';
         const accountType = line.chartOfAccount.accountType;
         const financialStatement = line.chartOfAccount.financialStatement;
         const debit = parseFloat(line.debitAmount) || 0;
         const credit = parseFloat(line.creditAmount) || 0;
         const accountId = line.chartOfAccount.id;
 
-        if (line.chartOfAccount.accountName.includes('Cash')) {
+        // Cash-like accounts (Cash & Bank)
+        const isCashLike = /cash|bank/i.test(name);
+        if (isCashLike) {
           cash += debit - credit;
+          monthlyCashFlow[monthYear] += debit - credit;
         }
-        if (line.chartOfAccount.accountName.includes('Receivable')) {
+        if (/receivable/i.test(name)) {
           receivablesTotal += debit - credit;
         }
-        if (line.chartOfAccount.accountName.includes('Payable')) {
+        if (/payable/i.test(name)) {
           payablesTotal += credit - debit;
         }
 
         if (financialStatement === 'Income Statement') {
           const existing =
             accountMap.get(accountId) || {
-              accountName: line.chartOfAccount.accountName,
+              accountName: name,
               accountNo: line.chartOfAccount.accountNo,
               accountType,
               totalDebit: 0,
@@ -272,21 +301,23 @@ const Dashboard = () => {
               balance: 0,
             };
 
-          let amount = 0;
           if (accountType.includes('Revenue')) {
-            amount = credit - debit;
             monthlyTotals[monthYear].revenue += credit;
+            accountMap.set(accountId, {
+              ...existing,
+              totalDebit: existing.totalDebit + debit,
+              totalCredit: existing.totalCredit + credit,
+              balance: existing.balance + (credit - debit),
+            });
           } else if (accountType.includes('Expense')) {
-            amount = debit - credit;
             monthlyTotals[monthYear].expense += debit;
+            accountMap.set(accountId, {
+              ...existing,
+              totalDebit: existing.totalDebit + debit,
+              totalCredit: existing.totalCredit + credit,
+              balance: existing.balance + (debit - credit),
+            });
           }
-
-          accountMap.set(accountId, {
-            ...existing,
-            totalDebit: existing.totalDebit + debit,
-            totalCredit: existing.totalCredit + credit,
-            balance: existing.balance + amount,
-          });
         }
       });
     });
@@ -303,9 +334,38 @@ const Dashboard = () => {
     const profit = revenueTotal - expenseTotal;
 
     const monthlyDataArray = Object.entries(monthlyTotals)
-      .map(([month, t]) => ({ month, revenue: t.revenue || 0, expense: t.expense || 0, profit: (t.revenue || 0) - (t.expense || 0) }))
+      .map(([month, t]) => ({
+        month,
+        revenue: t.revenue || 0,
+        expense: t.expense || 0,
+        profit: (t.revenue || 0) - (t.expense || 0),
+      }))
       .filter((i) => i.month)
       .sort((a, b) => a.month.localeCompare(b.month));
+
+    // Compute changes vs last period (month-over-month)
+    let revenueChange = 0,
+      expenseChange = 0,
+      profitChange = 0,
+      cashChange = 0;
+
+    const lt = lastTwo(monthlyTotals);
+    if (lt) {
+      const { prevKey, currKey } = lt;
+      const prev = monthlyTotals[prevKey];
+      const curr = monthlyTotals[currKey];
+
+      revenueChange = pctChange(curr.revenue ?? 0, prev.revenue ?? 0);
+      expenseChange = pctChange(curr.expense ?? 0, prev.expense ?? 0);
+
+      const prevProfit = (prev.revenue ?? 0) - (prev.expense ?? 0);
+      const currProfit = (curr.revenue ?? 0) - (curr.expense ?? 0);
+      profitChange = pctChange(currProfit, prevProfit);
+
+      const prevCashFlow = monthlyCashFlow[prevKey] ?? 0;
+      const currCashFlow = monthlyCashFlow[currKey] ?? 0;
+      cashChange = pctChange(currCashFlow, prevCashFlow);
+    }
 
     setRevenues(revenues);
     setExpenses(expenses);
@@ -316,10 +376,22 @@ const Dashboard = () => {
     setReceivables(receivablesTotal);
     setPayables(payablesTotal);
     setMonthlyData(monthlyDataArray);
+    setChanges({
+      revenue: Number.isFinite(revenueChange) ? revenueChange : 0,
+      // Show expense increase as negative (worse), decrease as positive (better)
+      expense: Number.isFinite(expenseChange) ? -expenseChange : 0,
+      profit: Number.isFinite(profitChange) ? profitChange : 0,
+      cash: Number.isFinite(cashChange) ? cashChange : 0,
+    });
   };
 
   const formatCurrency = (amount: number) =>
-    amount.toLocaleString(undefined, { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    amount.toLocaleString(undefined, {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
 
   const formatShortCurrency = (amount: number) => {
     if (Math.abs(amount) >= 1_000_000) return `${(amount / 1_000_000).toFixed(1)}M`;
@@ -484,10 +556,30 @@ const Dashboard = () => {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Total Revenue" value={formatCurrency(totalRevenue)} change={8.2} icon={<FiTrendingUp className="h-5 w-5" />} />
-        <KpiCard title="Total Expenses" value={formatCurrency(totalExpense)} change={-3.5} icon={<FiTrendingDown className="h-5 w-5" />} />
-        <KpiCard title="Net Profit" value={formatCurrency(netProfit)} change={netProfit >= 0 ? 12.7 : -5.3} icon={<FiDollarSign className="h-5 w-5" />} />
-        <KpiCard title="Cash Balance" value={formatCurrency(cashBalance)} change={4.1} icon={<FiCreditCard className="h-5 w-5" />} />
+        <KpiCard
+          title="Total Revenue"
+          value={formatCurrency(totalRevenue)}
+          change={changes.revenue}
+          icon={<FiTrendingUp className="h-5 w-5" />}
+        />
+        <KpiCard
+          title="Total Expenses"
+          value={formatCurrency(totalExpense)}
+          change={changes.expense} // negative when expenses increase (bad), positive when they decrease (good)
+          icon={<FiTrendingDown className="h-5 w-5" />}
+        />
+        <KpiCard
+          title="Net Profit"
+          value={formatCurrency(netProfit)}
+          change={changes.profit}
+          icon={<FiDollarSign className="h-5 w-5" />}
+        />
+        <KpiCard
+          title="Cash Balance"
+          value={formatCurrency(cashBalance)}
+          change={changes.cash}
+          icon={<FiCreditCard className="h-5 w-5" />}
+        />
       </div>
 
       {/* Charts */}
@@ -505,7 +597,14 @@ const Dashboard = () => {
           </div>
           <div className="h-80">
             {monthlyData.length > 0 ? (
-              <Chart key={monthlyData.length} options={monthlyTrendsOptions} series={monthlyTrendsSeries} type="area" height="100%" width="100%" />
+              <Chart
+                key={monthlyData.length}
+                options={monthlyTrendsOptions}
+                series={monthlyTrendsSeries}
+                type="area"
+                height="100%"
+                width="100%"
+              />
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-slate-500">No monthly data available</div>
             )}
@@ -557,12 +656,16 @@ const Dashboard = () => {
             </div>
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-md hover:border-emerald-300">
               <p className="text-sm font-medium text-emerald-700">Profit Margin</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900">{totalRevenue > 0 ? `${((netProfit / totalRevenue) * 100).toFixed(1)}%` : '0%'}</p>
+              <p className="mt-1 text-2xl font-semibold text-slate-900">
+                {totalRevenue > 0 ? `${((netProfit / totalRevenue) * 100).toFixed(1)}%` : '0%'}
+              </p>
               <p className="mt-1 text-xs text-emerald-600">Net profit / Revenue</p>
             </div>
             <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-md hover:border-orange-300">
               <p className="text-sm font-medium text-orange-700">Expense Ratio</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900">{totalRevenue > 0 ? `${((totalExpense / totalRevenue) * 100).toFixed(1)}%` : '0%'}</p>
+              <p className="mt-1 text-2xl font-semibold text-slate-900">
+                {totalRevenue > 0 ? `${((totalExpense / totalRevenue) * 100).toFixed(1)}%` : '0%'}
+              </p>
               <p className="mt-1 text-xs text-orange-600">Expenses / Revenue</p>
             </div>
           </div>
