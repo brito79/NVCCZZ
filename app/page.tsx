@@ -47,17 +47,19 @@ export default function Home() {
     ]
   };
 
+
   useEffect(() => {
-    const isSessionActive = sessionStorage.getItem('user-session-active');
-    if (isSessionActive === 'true') {
+    const isSessionActive = sessionStorage.getItem('userID');
+    if (isSessionActive) {
       setLogged(true);
       setShowWelcome(false);
       setContentVisible(true);
     } else {
       const timer = setTimeout(() => {
-        setShowWelcome(false);
-        setContentVisible(true);
+        setShowWelcome(true);
+        setContentVisible(false);
       }, 3000);
+      router.push('/auth')
       return () => clearTimeout(timer);
     }
   }, []);
