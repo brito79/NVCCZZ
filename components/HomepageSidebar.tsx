@@ -7,6 +7,7 @@ import {
   FaChartLine,
   FaChevronLeft,
   FaChevronRight,
+  FaExternalLinkAlt,
 } from 'react-icons/fa';
 
 // Navigation items - only Accounting and Performance Management
