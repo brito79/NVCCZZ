@@ -4,7 +4,7 @@ import "./globals.css";
 import "./theme-blue.css"; // premium blue theme tokens
 import type { ReactNode } from "react";
 import Layout from "@/components/layout/Layout";
-  
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700"],

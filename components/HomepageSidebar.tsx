@@ -127,15 +127,15 @@ export default function HomepageSidebar() {
                             size={14} 
                           />
                         </div>
-                        
+
                         <div className="min-w-0 flex-1 flex items-center justify-between">
-                          <span className="font-medium text-slate-200 group-hover:text-white text-xs">
-                            {item.label}
-                          </span>
-                          <FaExternalLinkAlt 
-                            className="text-slate-500 group-hover:text-blue-300 transition-colors"
-                            size={8}
-                          />
+                          <span className="font-medium text-slate-700 group-hover:text-slate-900 text-xs">
+                              {item.label}
+                            </span>
+                            <FaExternalLinkAlt 
+                              className="text-slate-500 group-hover:text-blue-600 transition-colors"
+                              size={8}
+                            />
                         </div>
                       </button>
                     ) : (
@@ -147,9 +147,9 @@ export default function HomepageSidebar() {
                               size={14} 
                             />
                           </div>
-                          
+
                           <div className="min-w-0 flex-1">
-                            <span className="font-medium text-slate-200 group-hover:text-white text-xs">
+                            <span className="font-medium text-slate-700 group-hover:text-slate-900 text-xs">
                               {item.label}
                             </span>
                           </div>

@@ -64,7 +64,7 @@ export default function ProfileMenu() {
           setUserData(data.data);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch user data");
+        // Silently handle auth errors - don't show error to user
         console.error("Error fetching user data:", err);
       } finally {
         setLoading(false);
@@ -105,6 +105,17 @@ export default function ProfileMenu() {
       <div className="relative">
         <div className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background/60">
           <div className="w-4 h-4 rounded-full border-2 border-gray-300 border-t-transparent animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  // If no user data and error, show a simple user icon without dropdown
+  if (!userData && error) {
+    return (
+      <div className="relative">
+        <div className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background/60 text-foreground">
+          <User className="w-4 h-4" />
         </div>
       </div>
     );
@@ -264,12 +275,7 @@ export default function ProfileMenu() {
         </div>
       )}
 
-      {/* Auth error fallback */}
-      {error && (
-        <div className="absolute right-0 mt-2 w-72 z-50 rounded-md bg-red-600/90 text-white text-sm p-3 shadow-lg">
-          {error}
-        </div>
-      )}
+      
     </div>
   );
 }

@@ -15,6 +15,7 @@ import HeroClient from "./HeroClient";
 import { ChatbotProvider } from "@/components/chatbot";
 import HomepageSidebar from "@/components/HomepageSidebar";
 import SocialMediaLinks from "@/components/mediapages/SocialMediaLinks";
+import Layout from "@/components/Layout"; // Assuming Layout component is imported
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -102,151 +103,96 @@ export default function Home() {
     }
   };
 
+  // Assuming TabsDemo is a component that uses the Tabs and TabsContent, TabsList, TabsTrigger components
+  // and renders the actual content based on the currentTab. For this example, we'll create a placeholder.
+  const TabsDemo = () => (
+    <div className="text-foreground">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentTab}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={contentVariants}
+        >
+          {currentTab === "feed" && (
+            <TabsContent value="feed">
+              <FeedPage />
+            </TabsContent>
+          )}
+
+          {currentTab === "newsletter" && (
+            <TabsContent value="newsletter">
+              <NewsletterCarousel />
+            </TabsContent>
+          )}
+
+          {currentTab === "forum" && (
+            <TabsContent value="forum">
+              <Posts />
+            </TabsContent>
+          )}
+
+          {currentTab === "calendar" && (
+            <TabsContent value="calendar">
+              <EventsCalendar events={eventsData} />
+            </TabsContent>
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+
+
   return (
     <ChatbotProvider position="bottom-right">
-      <div className="flex min-h-screen bg-background">
-        {/* Sidebar */}
-        <HomepageSidebar />
-
-        {/* Main Content */}
-        <div className="relative flex-1 overflow-hidden">
-          {/* Right Social Media Links - Fixed Position */}
-          <SocialMediaLinks />
-
-          {/* Hero (mock API data) */}
-          <section className="mx-auto w-full max-w-7xl px-3 py-3 sm:px-4">
-            {/* hydrating client-side is fine for now */}
-            <HeroClient />
-          </section>
-
-          {/* Welcome Splash Screen */}
-          <AnimatePresence mode="wait">
-            {showWelcome && (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center"
-                style={{
-                  background: `radial-gradient(ellipse at center, rgba(59, 130, 246, 0.4) 0%, rgba(51, 65, 85, 1) 100%)`,
-                }}
-              >
-                <motion.div 
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="text-center"
-                >
-                  <motion.h1 
-                    className="mb-4 text-5xl font-bold text-white"
-                    initial={{ y: 20 }}
-                    animate={{ y: 0 }}
-                    transition={{ delay: 0.3 }}
+      <Layout> 
+        <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+          <HomepageSidebar />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-auto">
+              <main className="p-6">
+                <div className="space-y-6">
+                  <HeroClient />
+                  <Tabs 
+                    defaultValue="feed" 
+                    className="w-[95%] max-w-none"
+                    onValueChange={(value) => setCurrentTab(value)}
                   >
-                    Welcome to NVCCZ
-                  </motion.h1>
-                  <motion.p 
-                    className="text-xl text-blue-200"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                  >
-                    Loading your experience...
-                  </motion.p>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Main Content */}
-          <div 
-            className={`flex min-h-screen flex-col items-center justify-start transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
-            style={{ 
-              background: `
-                radial-gradient(ellipse at top left, color-mix(in oklch, var(--primary) 25%, transparent) 0%, transparent 45%),
-                radial-gradient(ellipse at bottom right, color-mix(in oklch, var(--chart-2) 25%, transparent) 0%, transparent 45%),
-                linear-gradient(to bottom right, color-mix(in oklch, var(--secondary) 85%, white), color-mix(in oklch, var(--accent) 70%, white))
-              `,
-              backgroundAttachment: 'fixed'
-            }}
-          >
-            {/* Top-right controls (sticky) */}
-            <div className="sticky top-4 z-40 flex w-full items-center justify-end gap-3">
-              <div className="flex items-center gap-3 rounded-xl border border-input bg-card/70 px-3 py-2 shadow-xl backdrop-blur">
-                <div className="h-5 w-px bg-slate-600/60" />
-                {/* Removed profile button next to calendar */}
-                <ProfileMenu />
-              </div>
-            </div>
-
-            <Tabs 
-              defaultValue="feed" 
-              className="w-[95%] max-w-none"
-              onValueChange={(value) => setCurrentTab(value)}
-            >
-              <TabsList 
-                className="mb-8 grid w-full grid-cols-4 gap-2 rounded-xl border border-input bg-card p-2 shadow-lg backdrop-blur"
-              >
-                {['feed', 'newsletter', 'forum', 'calendar'].map((tabValue) => (
-                  <TabsTrigger key={tabValue} value={tabValue} asChild>
-                    <motion.button
-                      className="group relative w-full overflow-hidden rounded-lg px-6 py-3 text-base font-semibold text-muted-foreground data-[state=active]:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
-                      variants={tabVariants}
-                      initial="inactive"
-                      animate={currentTab === tabValue ? 'active' : 'inactive'}
-                      whileHover="hover"
+                    <TabsList 
+                      className="mb-8 grid w-full grid-cols-4 gap-2 rounded-xl border border-input bg-card p-2 shadow-lg backdrop-blur"
                     >
-                      <span className="relative z-10 capitalize">{tabValue}</span>
-                      <span
-                        className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-data-[state=active]:opacity-100 bg-gradient-to-r from-chart-2/30 via-primary/50 to-primary/80"
-                      />
-                      <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-border data-[state=active]:ring-primary/40" />
-                    </motion.button>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+                      {['feed', 'newsletter', 'forum', 'calendar'].map((tabValue) => (
+                        <TabsTrigger key={tabValue} value={tabValue} asChild>
+                          <motion.button
+                            className="group relative w-full overflow-hidden rounded-lg px-6 py-3 text-base font-semibold text-muted-foreground data-[state=active]:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
+                            variants={tabVariants}
+                            initial="inactive"
+                            animate={currentTab === tabValue ? 'active' : 'inactive'}
+                            whileHover="hover"
+                          >
+                            <span className="relative z-10 capitalize">{tabValue}</span>
+                            <span
+                              className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-data-[state=active]:opacity-100 bg-gradient-to-r from-chart-2/30 via-primary/50 to-primary/80"
+                            />
+                            <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-border data-[state=active]:ring-primary/40" />
+                          </motion.button>
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
 
-              <div 
-                className="relative min-h-[300px] w-full rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentTab}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    variants={contentVariants}
-                  >
-                    {currentTab === "feed" && (
-                      <TabsContent value="feed" className="text-foreground">
-                        <FeedPage />
-                      </TabsContent>
-                    )}
-
-                    {currentTab === "newsletter" && (
-                      <TabsContent value="newsletter" className="text-foreground">
-                        <NewsletterCarousel />
-                      </TabsContent>
-                    )}
-
-                    {currentTab === "forum" && (
-                      <TabsContent value="forum" className="text-foreground">
-                        <Posts />
-                      </TabsContent>
-                    )}
-
-                    {currentTab === "calendar" && (
-                      <TabsContent value="calendar" className="text-foreground">
-                        <EventsCalendar events={eventsData} />
-                      </TabsContent>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </Tabs>
+                    <div 
+                      className="relative min-h-[300px] w-full rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
+                    >
+                      <TabsDemo />
+                    </div>
+                  </Tabs>
+                </div>
+              </main>
+            </div>
           </div>
         </div>
-      </div>
+      </Layout>
     </ChatbotProvider>
   );
 }
