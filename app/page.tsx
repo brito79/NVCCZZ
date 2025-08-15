@@ -15,7 +15,6 @@ import HeroClient from "./HeroClient";
 import { ChatbotProvider } from "@/components/chatbot";
 import HomepageSidebar from "@/components/HomepageSidebar";
 import SocialMediaLinks from "@/components/mediapages/SocialMediaLinks";
-import Layout from "@/components/layout/Layout";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -146,53 +145,51 @@ export default function Home() {
 
   return (
     <ChatbotProvider position="bottom-right">
-      <Layout> 
-        <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-          <HomepageSidebar />
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-auto">
-              <main className="p-6">
-                <div className="space-y-6">
-                  <HeroClient />
-                  <Tabs 
-                    defaultValue="feed" 
-                    className="w-[95%] max-w-none"
-                    onValueChange={(value) => setCurrentTab(value)}
+      <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <HomepageSidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-auto">
+            <main className="p-6">
+              <div className="space-y-6">
+                <HeroClient />
+                <Tabs 
+                  defaultValue="feed" 
+                  className="w-[95%] max-w-none"
+                  onValueChange={(value) => setCurrentTab(value)}
+                >
+                  <TabsList 
+                    className="mb-8 grid w-full grid-cols-4 gap-2 rounded-xl border border-input bg-card p-2 shadow-lg backdrop-blur"
                   >
-                    <TabsList 
-                      className="mb-8 grid w-full grid-cols-4 gap-2 rounded-xl border border-input bg-card p-2 shadow-lg backdrop-blur"
-                    >
-                      {['feed', 'newsletter', 'forum', 'calendar'].map((tabValue) => (
-                        <TabsTrigger key={tabValue} value={tabValue} asChild>
-                          <motion.button
-                            className="group relative w-full overflow-hidden rounded-lg px-6 py-3 text-base font-semibold text-muted-foreground data-[state=active]:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
-                            variants={tabVariants}
-                            initial="inactive"
-                            animate={currentTab === tabValue ? 'active' : 'inactive'}
-                            whileHover="hover"
-                          >
-                            <span className="relative z-10 capitalize">{tabValue}</span>
-                            <span
-                              className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-data-[state=active]:opacity-100 bg-gradient-to-r from-chart-2/30 via-primary/50 to-primary/80"
-                            />
-                            <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-border data-[state=active]:ring-primary/40" />
-                          </motion.button>
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
+                    {['feed', 'newsletter', 'forum', 'calendar'].map((tabValue) => (
+                      <TabsTrigger key={tabValue} value={tabValue} asChild>
+                        <motion.button
+                          className="group relative w-full overflow-hidden rounded-lg px-6 py-3 text-base font-semibold text-muted-foreground data-[state=active]:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
+                          variants={tabVariants}
+                          initial="inactive"
+                          animate={currentTab === tabValue ? 'active' : 'inactive'}
+                          whileHover="hover"
+                        >
+                          <span className="relative z-10 capitalize">{tabValue}</span>
+                          <span
+                            className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-data-[state=active]:opacity-100 bg-gradient-to-r from-chart-2/30 via-primary/50 to-primary/80"
+                          />
+                          <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-border data-[state=active]:ring-primary/40" />
+                        </motion.button>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
 
-                    <div 
-                      className="relative min-h-[300px] w-full rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
-                    >
-                      <TabsDemo />
-                    </div>
-                  </Tabs>
-                </div>
-              </main>
-            </div>
+                  <div 
+                    className="relative min-h-[300px] w-full rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
+                  >
+                    <TabsDemo />
+                  </div>
+                </Tabs>
+              </div>
+            </main>
           </div>
         </div>
-      </Layout>
+      </div>
     </ChatbotProvider>
   );
 }
