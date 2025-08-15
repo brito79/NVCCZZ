@@ -101,13 +101,13 @@ export default function HomepageSidebar() {
         data-sidebar
         animate={{ width: isOpen ? 200 : (isMobile ? 0 : 50) }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className={`h-screen flex flex-col bg-slate-900 border-r border-slate-700/50 shadow-sm overflow-hidden ${
+        className={`h-screen flex flex-col bg-card border-r border-border shadow-sm overflow-hidden ${
           isMobile ? 'fixed left-0 top-0 z-50' : 'sticky top-0'
         } ${isMobile && !isOpen ? 'md:flex hidden' : ''}`}
         style={{ minWidth: isOpen ? 200 : (isMobile ? 0 : 50) }}
       >
       {/* Header Section */}
-      <div className="flex flex-col items-center py-3 border-b border-slate-700/40">
+      <div className="flex flex-col items-center py-3 border-b border-border">
         {/* Logo/Brand Area */}
         <AnimatePresence mode="wait">
           {isOpen && (
@@ -118,18 +118,18 @@ export default function HomepageSidebar() {
               transition={{ duration: 0.2 }}
               className="mb-3 text-center"
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center mb-2 shadow-lg shadow-blue-500/20">
-                <span className="text-white font-bold text-sm">N</span>
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mb-2 shadow-lg">
+                <span className="text-primary-foreground font-bold text-sm">N</span>
               </div>
-              <h3 className="text-sm font-bold text-white mb-1">NVCCZ</h3>
-              <p className="text-xs text-slate-400">Dashboard</p>
+              <h3 className="text-sm font-bold text-foreground mb-1">NVCCZ</h3>
+              <p className="text-xs text-muted-foreground">Dashboard</p>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Toggle Button */}
         <motion.button
-          className="p-1.5 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:bg-slate-700/60 hover:border-blue-500/30 transition-all duration-300"
+          className="p-1.5 rounded-lg bg-secondary border border-border hover:bg-accent hover:border-primary/30 transition-all duration-300"
           onClick={toggleSidebar}
           aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           whileHover={{ scale: 1.05 }}
@@ -140,8 +140,8 @@ export default function HomepageSidebar() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {isOpen ? 
-              <FaChevronLeft className="text-blue-400 hover:text-blue-300" size={12} /> : 
-              <FaChevronRight className="text-blue-400 hover:text-blue-300" size={12} />
+              <FaChevronLeft className="text-primary hover:text-primary/80" size={12} /> : 
+              <FaChevronRight className="text-primary hover:text-primary/80" size={12} />
             }
           </motion.div>
         </motion.button>
@@ -172,37 +172,37 @@ export default function HomepageSidebar() {
                     {item.isExternal ? (
                       <button
                         onClick={() => handleExternalClick(item.href)}
-                        className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-slate-300 hover:bg-slate-800/50 border-l-4 border-transparent hover:border-l-4 hover:border-blue-500 w-full text-left"
+                        className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary w-full text-left"
                       >
                         <div className="flex-shrink-0">
                           <item.icon 
-                            className="text-blue-400 group-hover:text-blue-300"
+                            className="text-primary group-hover:text-primary/80"
                             size={14} 
                           />
                         </div>
 
                         <div className="min-w-0 flex-1 flex items-center justify-between">
-                          <span className="font-medium text-slate-700 group-hover:text-slate-900 text-xs">
+                          <span className="font-medium text-foreground group-hover:text-accent-foreground text-xs">
                               {item.label}
                             </span>
                             <FaExternalLinkAlt 
-                              className="text-slate-500 group-hover:text-blue-600 transition-colors"
+                              className="text-muted-foreground group-hover:text-primary transition-colors"
                               size={8}
                             />
                         </div>
                       </button>
                     ) : (
                       <Link href={item.href} className="block">
-                        <div className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-slate-300 hover:bg-slate-800/50 border-l-4 border-transparent hover:border-l-4 hover:border-blue-500">
+                        <div className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary">
                           <div className="flex-shrink-0">
                             <item.icon 
-                              className="text-blue-400 group-hover:text-blue-300"
+                              className="text-primary group-hover:text-primary/80"
                               size={14} 
                             />
                           </div>
 
                           <div className="min-w-0 flex-1">
-                            <span className="font-medium text-slate-700 group-hover:text-slate-900 text-xs">
+                            <span className="font-medium text-foreground group-hover:text-accent-foreground text-xs">
                               {item.label}
                             </span>
                           </div>
@@ -223,7 +223,7 @@ export default function HomepageSidebar() {
                     {item.isExternal ? (
                       <button
                         onClick={() => handleExternalClick(item.href)}
-                        className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800/50 w-full"
+                        className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent w-full"
                       >
                         <div className="flex items-center justify-center">
                           <item.icon 
@@ -234,10 +234,10 @@ export default function HomepageSidebar() {
                       </button>
                     ) : (
                       <Link href={item.href}>
-                        <div className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800/50">
+                        <div className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent">
                           <div className="flex items-center justify-center">
                             <item.icon 
-                              className="text-blue-400 group-hover:text-blue-300"
+                              className="text-primary group-hover:text-primary/80"
                               size={16} 
                             />
                           </div>
@@ -253,7 +253,7 @@ export default function HomepageSidebar() {
       </div>
 
       {/* Footer Section */}
-      <div className="px-2 py-2 border-t border-slate-700/40">
+      <div className="px-2 py-2 border-t border-border">
         <AnimatePresence mode="wait">
           {isOpen ? (
             <motion.div
@@ -264,7 +264,7 @@ export default function HomepageSidebar() {
               className="text-center"
               key="footer-expanded"
             >
-              <div className="text-xs text-slate-500">NVCCZ Dashboard</div>
+              <div className="text-xs text-muted-foreground">NVCCZ Dashboard</div>
             </motion.div>
           ) : (
             <motion.div
@@ -275,8 +275,8 @@ export default function HomepageSidebar() {
               className="flex justify-center"
               key="footer-collapsed"
             >
-              <div className="w-5 h-5 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xs font-medium">N</span>
+              <div className="w-5 h-5 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground text-xs font-medium">N</span>
               </div>
             </motion.div>
           )}
