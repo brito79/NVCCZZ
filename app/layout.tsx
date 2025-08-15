@@ -3,7 +3,7 @@ import { Poppins, Noto_Sans } from "next/font/google";
 import "./globals.css";
 import "./theme-blue.css"; // premium blue theme tokens
 import type { ReactNode } from "react";
-import Layout from "@/components/layout/Layout"; // This import might still be needed for other pages if not all routes use the auth layout.
+import { ChatbotProvider } from "@/components/chatbot";
 
 const poppins = Poppins({
   subsets: ["latin"],
