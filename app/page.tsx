@@ -17,7 +17,7 @@ import HomepageSidebar from "@/components/HomepageSidebar";
 import SocialMediaLinks from "@/components/mediapages/SocialMediaLinks";
 import Layout from "@/components/layout/Layout";
 import { X, Info } from "lucide-react";
-import HeroCarousel from "@/components/HeroCarousel";
+import HeroCarousel from "@/components/hero/HeroCarousel";
 import FeedsTab from "./tabs/feeds";
 import CalendarTab from "./tabs/calendar";
 import NewsletterTab from "./tabs/newsletter";
