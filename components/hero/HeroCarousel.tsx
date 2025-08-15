@@ -111,26 +111,39 @@ export default function HeroCarousel({ slides, interval = 5000 }: { slides: Hero
         <button
           type="button"
           aria-label="Previous slide"
-          className="rounded-md border border-input bg-background/70 px-2 py-1 text-xs text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
+          className="rounded-md border border-input bg-background/70 p-2 text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
           onClick={() => goto(index - 1)}
         >
-          Prev
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
         <button
           type="button"
           aria-label={paused ? 'Play slides' : 'Pause slides'}
-          className="rounded-md border border-input bg-background/70 px-2 py-1 text-xs text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
+          className="rounded-md border border-input bg-background/70 p-2 text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
           onClick={() => setPaused((p) => !p)}
         >
-          {paused ? 'Play' : 'Pause'}
+          {paused ? (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1M9 14h1m4 0h1" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )}
         </button>
         <button
           type="button"
           aria-label="Next slide"
-          className="rounded-md border border-input bg-background/70 px-2 py-1 text-xs text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
+          className="rounded-md border border-input bg-background/70 p-2 text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring/50"
           onClick={() => goto(index + 1)}
         >
-          Next
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
     </section>
