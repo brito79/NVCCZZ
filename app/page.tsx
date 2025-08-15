@@ -15,7 +15,7 @@ import HeroClient from "./HeroClient";
 import { ChatbotProvider } from "@/components/chatbot";
 import HomepageSidebar from "@/components/HomepageSidebar";
 import SocialMediaLinks from "@/components/mediapages/SocialMediaLinks";
-import Layout from "@/components/Layout"; // Assuming Layout component is imported
+import Layout from "@/components/layout/Layout";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
