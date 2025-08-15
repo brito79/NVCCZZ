@@ -118,7 +118,7 @@ export default function Home() {
             {/* hydrating client-side is fine for now */}
             <HeroClient />
           </section>
-          
+
           {/* Welcome Splash Screen */}
           <AnimatePresence mode="wait">
             {showWelcome && (
@@ -160,7 +160,7 @@ export default function Home() {
 
           {/* Main Content */}
           <div 
-            className={`flex min-h-screen flex-col items-center justify-start p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
+            className={`flex min-h-screen flex-col items-center justify-start transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
             style={{ 
               background: `
                 radial-gradient(ellipse at top left, color-mix(in oklch, var(--primary) 25%, transparent) 0%, transparent 45%),
@@ -174,10 +174,11 @@ export default function Home() {
             <div className="sticky top-4 z-40 flex w-full items-center justify-end gap-3">
               <div className="flex items-center gap-3 rounded-xl border border-input bg-card/70 px-3 py-2 shadow-xl backdrop-blur">
                 <div className="h-5 w-px bg-slate-600/60" />
+                {/* Removed profile button next to calendar */}
                 <ProfileMenu />
               </div>
             </div>
-            
+
             <Tabs 
               defaultValue="feed" 
               className="w-[95%] max-w-none"
@@ -204,9 +205,9 @@ export default function Home() {
                   </TabsTrigger>
                 ))}
               </TabsList>
-              
+
               <div 
-                className="relative min-h-[300px] rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
+                className="relative min-h-[300px] w-full rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -221,19 +222,19 @@ export default function Home() {
                         <FeedPage />
                       </TabsContent>
                     )}
-                    
+
                     {currentTab === "newsletter" && (
                       <TabsContent value="newsletter" className="text-foreground">
                         <NewsletterCarousel />
                       </TabsContent>
                     )}
-                    
+
                     {currentTab === "forum" && (
                       <TabsContent value="forum" className="text-foreground">
                         <Posts />
                       </TabsContent>
                     )}
-                    
+
                     {currentTab === "calendar" && (
                       <TabsContent value="calendar" className="text-foreground">
                         <EventsCalendar events={eventsData} />

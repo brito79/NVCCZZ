@@ -35,7 +35,7 @@ const NAV_ITEMS = [
 ];
 
 export default function HomepageSidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
   const toggleSidebar = () => {

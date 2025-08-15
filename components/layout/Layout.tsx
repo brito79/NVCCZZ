@@ -29,7 +29,7 @@ export default function Layout({ children }: LayoutProps) {
 
       <Header />
 
-      <main id="main-content" className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4">
+      <main id="main-content" className="w-full">
         {children}
       </main>
 
@@ -44,7 +44,7 @@ function Header() {
       className="sticky top-0 z-40 border-b border-border/60 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/60"
       role="banner"
     >
-      <div className="mx-auto flex min-h-14 w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-3 sm:px-4">
+      <div className="flex min-h-14 w-full flex-wrap items-center justify-between gap-3 px-4">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-md">
           <div className="h-8 w-8 rounded-md bg-gradient-to-br from-sky-600 to-indigo-600" aria-hidden="true" />
@@ -88,7 +88,7 @@ function Header() {
 function Footer() {
   return (
     <footer className="border-t border-border/60 bg-card/70">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-2 px-3 py-6 text-xs text-muted-foreground sm:grid-cols-2 sm:px-4">
+      <div className="grid w-full grid-cols-1 items-center gap-2 px-4 py-6 text-xs text-muted-foreground sm:grid-cols-2">
         <p>© {new Date().getFullYear()} NVCCZ. All rights reserved.</p>
         <nav className="flex justify-start gap-4 sm:justify-end" aria-label="Footer">
           <Link href="/" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
