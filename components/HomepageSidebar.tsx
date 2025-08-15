@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -35,8 +35,33 @@ const NAV_ITEMS = [
 ];
 
 export default function HomepageSidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if screen is mobile size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isMobileScreen = window.innerWidth < 768; // md breakpoint
+      setIsMobile(isMobileScreen);
+      
+      // On mobile, default to closed; on desktop, default to open
+      if (isMobileScreen) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+
+    // Check on mount
+    checkScreenSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -46,13 +71,41 @@ export default function HomepageSidebar() {
     window.open(href, '_blank', 'noopener,noreferrer');
   };
 
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobile && isOpen) {
+        const sidebar = document.querySelector('[data-sidebar]');
+        if (sidebar && !sidebar.contains(event.target as Node)) {
+          setIsOpen(false);
+        }
+      }
+    };
+
+    if (isMobile && isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isMobile, isOpen]);
+
   return (
+    <>
+      {/* Mobile Overlay */}
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     <motion.aside
-      animate={{ width: isOpen ? 200 : 50 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="h-screen flex flex-col bg-slate-900 border-r border-slate-700/50 shadow-sm overflow-hidden sticky top-0"
-      style={{ minWidth: isOpen ? 200 : 50 }}
-    >
+        data-sidebar
+        animate={{ width: isOpen ? 200 : (isMobile ? 0 : 50) }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className={`h-screen flex flex-col bg-slate-900 border-r border-slate-700/50 shadow-sm overflow-hidden ${
+          isMobile ? 'fixed left-0 top-0 z-50' : 'sticky top-0'
+        } ${isMobile && !isOpen ? 'md:flex hidden' : ''}`}
+        style={{ minWidth: isOpen ? 200 : (isMobile ? 0 : 50) }}
+      >
       {/* Header Section */}
       <div className="flex flex-col items-center py-3 border-b border-slate-700/40">
         {/* Logo/Brand Area */}
@@ -229,6 +282,7 @@ export default function HomepageSidebar() {
           )}
         </AnimatePresence>
       </div>
-    </motion.aside>
+      </motion.aside>
+    </>
   );
 }
