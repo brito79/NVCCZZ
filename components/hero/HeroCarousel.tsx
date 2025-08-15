@@ -21,15 +21,23 @@ export default function HeroCarousel({ slides, interval = 5000 }: { slides: Hero
   const [index, setIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [paused, setPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Autoplay
   useEffect(() => {
     const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced || isHovering || paused || slides.length <= 1) return;
-    timerRef.current && clearTimeout(timerRef.current);
+    if (prefersReduced || isHovering || paused || slides.length <= 1) {
+      return;
+    }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     timerRef.current = setTimeout(() => setIndex((i) => (i + 1) % slides.length), interval);
-    return () => timerRef.current && clearTimeout(timerRef.current);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [index, isHovering, paused, interval, slides.length]);
 
   const goto = (i: number) => setIndex((i + slides.length) % slides.length);
