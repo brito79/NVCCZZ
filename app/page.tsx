@@ -11,6 +11,7 @@ import Posts from "./tabs/posts";
 import EventsCalendar from "./tabs/calendar";
 import NewsletterCarousel from "./tabs/newsletter";
 import FeedPage from "./tabs/feeds";
+import HeroClient from "./HeroClient";
 import { ChatbotProvider } from "@/components/chatbot";
 import HomepageSidebar from "@/components/HomepageSidebar";
 import SocialMediaLinks from "@/components/mediapages/SocialMediaLinks";
@@ -103,14 +104,20 @@ export default function Home() {
 
   return (
     <ChatbotProvider position="bottom-right">
-      <div className="flex min-h-screen bg-slate-700">
+      <div className="flex min-h-screen bg-background">
         {/* Sidebar */}
         <HomepageSidebar />
 
         {/* Main Content */}
-        <div className="flex-1 overflow-hidden relative">
+        <div className="relative flex-1 overflow-hidden">
           {/* Right Social Media Links - Fixed Position */}
           <SocialMediaLinks />
+
+          {/* Hero (mock API data) */}
+          <section className="mx-auto w-full max-w-7xl px-3 py-3 sm:px-4">
+            {/* hydrating client-side is fine for now */}
+            <HeroClient />
+          </section>
           
           {/* Welcome Splash Screen */}
           <AnimatePresence mode="wait">
@@ -119,7 +126,7 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 flex items-center justify-center z-50"
+                className="fixed inset-0 z-50 flex items-center justify-center"
                 style={{
                   background: `radial-gradient(ellipse at center, rgba(59, 130, 246, 0.4) 0%, rgba(51, 65, 85, 1) 100%)`,
                 }}
@@ -131,7 +138,7 @@ export default function Home() {
                   className="text-center"
                 >
                   <motion.h1 
-                    className="text-5xl font-bold text-white mb-4"
+                    className="mb-4 text-5xl font-bold text-white"
                     initial={{ y: 20 }}
                     animate={{ y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -153,19 +160,19 @@ export default function Home() {
 
           {/* Main Content */}
           <div 
-            className={`flex flex-col items-center justify-start min-h-screen p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
+            className={`flex min-h-screen flex-col items-center justify-start p-4 transition-opacity duration-1000 ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
             style={{ 
               background: `
-                radial-gradient(ellipse at top left, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom right, rgba(79, 70, 229, 0.3) 0%, transparent 50%),
-                linear-gradient(to bottom right, #334155, #475569, #3b82f6)
+                radial-gradient(ellipse at top left, color-mix(in oklch, var(--primary) 25%, transparent) 0%, transparent 45%),
+                radial-gradient(ellipse at bottom right, color-mix(in oklch, var(--chart-2) 25%, transparent) 0%, transparent 45%),
+                linear-gradient(to bottom right, color-mix(in oklch, var(--secondary) 85%, white), color-mix(in oklch, var(--accent) 70%, white))
               `,
               backgroundAttachment: 'fixed'
             }}
           >
             {/* Top-right controls (sticky) */}
-            <div className="w-full sticky top-4 z-40 flex items-center justify-end gap-3">
-              <div className="rounded-xl border border-slate-700/50 bg-[rgba(30,41,59,0.6)] backdrop-blur px-3 py-2 shadow-xl flex items-center gap-3">
+            <div className="sticky top-4 z-40 flex w-full items-center justify-end gap-3">
+              <div className="flex items-center gap-3 rounded-xl border border-input bg-card/70 px-3 py-2 shadow-xl backdrop-blur">
                 <div className="h-5 w-px bg-slate-600/60" />
                 <ProfileMenu />
               </div>
@@ -177,46 +184,29 @@ export default function Home() {
               onValueChange={(value) => setCurrentTab(value)}
             >
               <TabsList 
-                className="grid w-full grid-cols-4 gap-2 p-2 rounded-xl mb-8" 
-                style={{
-                  backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                  border: '1px solid rgba(55, 65, 81, 0.5)',
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                  backdropFilter: 'blur(8px)'
-                }}
+                className="mb-8 grid w-full grid-cols-4 gap-2 rounded-xl border border-input bg-card p-2 shadow-lg backdrop-blur"
               >
                 {['feed', 'newsletter', 'forum', 'calendar'].map((tabValue) => (
                   <TabsTrigger key={tabValue} value={tabValue} asChild>
                     <motion.button
-                      className="relative overflow-hidden rounded-lg px-6 py-3 text-sm font-medium group w-full"
+                      className="group relative w-full overflow-hidden rounded-lg px-6 py-3 text-base font-semibold text-muted-foreground data-[state=active]:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
                       variants={tabVariants}
                       initial="inactive"
-                      animate={currentTab === tabValue ? "active" : "inactive"}
+                      animate={currentTab === tabValue ? 'active' : 'inactive'}
                       whileHover="hover"
-                      style={{
-                        color: '#d1d5db',
-                        backgroundColor: 'transparent'
-                      }}
                     >
                       <span className="relative z-10 capitalize">{tabValue}</span>
-                      <span 
-                        className="absolute inset-0 opacity-0 rounded-lg transition-opacity duration-300 group-data-[state=active]:opacity-100" 
-                        style={{
-                          background: 'linear-gradient(to right, #1e3a8a, #3b82f6)'
-                        }}
+                      <span
+                        className="absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300 group-data-[state=active]:opacity-100 bg-gradient-to-r from-chart-2/30 via-primary/50 to-primary/80"
                       />
+                      <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-border data-[state=active]:ring-primary/40" />
                     </motion.button>
                   </TabsTrigger>
                 ))}
               </TabsList>
               
               <div 
-                className="p-6 rounded-xl shadow-xl relative min-h-[300px]"
-                style={{
-                  backgroundColor: 'rgba(30, 41, 59, 0.6)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(55, 65, 81, 0.4)'
-                }}
+                className="relative min-h-[300px] rounded-xl border p-6 shadow-xl bg-card/95 backdrop-blur"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -227,25 +217,25 @@ export default function Home() {
                     variants={contentVariants}
                   >
                     {currentTab === "feed" && (
-                      <TabsContent value="feed" className="text-gray-300">
+                      <TabsContent value="feed" className="text-foreground">
                         <FeedPage />
                       </TabsContent>
                     )}
                     
                     {currentTab === "newsletter" && (
-                      <TabsContent value="newsletter" className="text-gray-300">
+                      <TabsContent value="newsletter" className="text-foreground">
                         <NewsletterCarousel />
                       </TabsContent>
                     )}
                     
                     {currentTab === "forum" && (
-                      <TabsContent value="forum" className="text-gray-300">
+                      <TabsContent value="forum" className="text-foreground">
                         <Posts />
                       </TabsContent>
                     )}
                     
                     {currentTab === "calendar" && (
-                      <TabsContent value="calendar" className="text-gray-300">
+                      <TabsContent value="calendar" className="text-foreground">
                         <EventsCalendar events={eventsData} />
                       </TabsContent>
                     )}
