@@ -89,7 +89,17 @@ function Footer() {
   return (
     <footer className="border-t border-border/60 bg-card/70">
       <div className="grid w-full grid-cols-1 items-center gap-2 px-4 py-6 text-xs text-muted-foreground sm:grid-cols-2">
-        <p>© {new Date().getFullYear()} NVCCZ. All rights reserved.</p>
+        <p>
+          Developed By{" "}
+          <a
+            href="https://www.niakazi.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1 underline"
+          >
+            Niakazi Technology Solutions
+          </a>
+        </p>
         <nav className="flex justify-start gap-4 sm:justify-end" aria-label="Footer">
           <Link href="/" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
             Home
