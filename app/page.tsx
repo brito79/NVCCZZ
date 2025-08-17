@@ -152,6 +152,7 @@ export default function Home() {
 
   return (
     <Layout>
+      <ChatbotProvider position="bottom-right">
       <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <HomepageSidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -197,6 +198,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      </ChatbotProvider>
     </Layout>
   );
 }

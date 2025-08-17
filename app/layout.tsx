@@ -35,9 +35,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#0b1220" />
       </head>
       <body className="font-sans antialiased">
-        <ChatbotProvider>
+       
           {children}
-        </ChatbotProvider>
+        
       </body>
     </html>
   );
