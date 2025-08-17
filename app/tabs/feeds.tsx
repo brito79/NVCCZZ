@@ -285,7 +285,7 @@ const FeedPage = () => {
             <div className="flex items-center gap-3">
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-600 shadow-md" />
               <div>
-                <h1 className="text-sm font-semibold tracking-tight text-foreground sm:text-base">
+                <h1 className="text-lg font-medium tracking-tight text-foreground sm:text-base">
                   NVCCZ Financial Feeds
                 </h1>
                 <p className="text-[11px] text-muted-foreground">Curated informatics • live rates</p>
@@ -293,9 +293,10 @@ const FeedPage = () => {
             </div>
             <button
               onClick={refresh}
-              className="inline-flex items-center h-12 w-16 gap-2 rounded-lg border border-input bg-card/80 px-3 py-1.5 text-xs text-foreground shadow-sm transition-colors hover:border-primary/50"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-input bg-slate-300 px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary/50"
             >
-              <RefreshCw size={14} className="" /> Refresh
+              <RefreshCw size={16} />
+              Refresh
             </button>
           </div>
         </div>
