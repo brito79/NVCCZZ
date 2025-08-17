@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { ChatbotProvider } from '@/components/chatbot';
+
 
 // Poppins in globals.css:
 // @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
@@ -48,7 +48,7 @@ const LoginPage = () => {
   };
 
   return (
-    <ChatbotProvider position="bottom-left">
+    <>
       {/* ===== Background Layer ===== */}
       <div className="relative min-h-screen overflow-hidden">
         {/* Background image with subtle zoom/fade (Ken Burns) */}
@@ -221,7 +221,7 @@ const LoginPage = () => {
           }
         `}</style>
       </div>
-    </ChatbotProvider>
+    </>
   );
 };
 
