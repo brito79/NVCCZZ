@@ -293,7 +293,7 @@ const FeedPage = () => {
             </div>
             <button
               onClick={refresh}
-              className="inline-flex items-center gap-2 rounded-lg border border-input bg-card/80 px-3 py-1.5 text-xs text-foreground shadow-sm transition-colors hover:border-primary/50"
+              className="inline-flex items-center h-12 w-16 gap-2 rounded-lg border border-input bg-card/80 px-3 py-1.5 text-xs text-foreground shadow-sm transition-colors hover:border-primary/50"
             >
               <RefreshCw size={14} className="" /> Refresh
             </button>
@@ -303,7 +303,7 @@ const FeedPage = () => {
 
       {/* RBZ + Summary modules */}
       <section className="mx-auto max-w-7xl px-2 py-2 sm:px-3">
-        <div className="mb-2"><FloatingRBZData /></div>
+        {/* <div className="mb-2"><FloatingRBZData /></div> */}
         <div className="mb-2"><ZimFinancialData /></div>
       </section>
 

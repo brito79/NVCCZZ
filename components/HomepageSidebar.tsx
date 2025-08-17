@@ -118,11 +118,13 @@ export default function HomepageSidebar() {
               transition={{ duration: 0.2 }}
               className="mb-3 text-center"
             >
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mb-2 shadow-lg">
-                <span className="text-primary-foreground font-bold text-sm">N</span>
+              <div className='flex items-center gap-3'>
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
+                  <span className="text-primary-foreground font-bold text-sm">N</span>
+                </div>
+                <p className="text-xs text-muted-foreground">NVCCZ Dashboard</p>
               </div>
-              <h3 className="text-sm font-bold text-foreground mb-1">NVCCZ</h3>
-              <p className="text-xs text-muted-foreground">Dashboard</p>
+              
             </motion.div>
           )}
         </AnimatePresence>
@@ -160,93 +162,93 @@ export default function HomepageSidebar() {
               onHoverEnd={() => setHoveredSection(null)}
               className="relative"
             >
-              <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait">
                 {isOpen ? (
                   <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.2 }}
-                    key="expanded"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                  key="expanded"
                   >
-                    {item.isExternal ? (
-                      <button
-                        onClick={() => handleExternalClick(item.href)}
-                        className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary w-full text-left"
-                      >
-                        <div className="flex-shrink-0">
-                          <item.icon 
-                            className="text-primary group-hover:text-primary/80"
-                            size={14} 
-                          />
-                        </div>
+                  {item.isExternal ? (
+                    <button
+                    onClick={() => handleExternalClick(item.href)}
+                    className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary w-full text-left"
+                    >
+                    <div className="flex-shrink-0">
+                      <item.icon 
+                      className="text-primary group-hover:text-primary/80"
+                      size={14} 
+                      />
+                    </div>
 
-                        <div className="min-w-0 flex-1 flex items-center justify-between">
-                          <span className="font-medium text-foreground group-hover:text-accent-foreground text-xs">
-                              {item.label}
-                            </span>
-                            <FaExternalLinkAlt 
-                              className="text-muted-foreground group-hover:text-primary transition-colors"
-                              size={8}
-                            />
-                        </div>
-                      </button>
-                    ) : (
-                      <Link href={item.href} className="block">
-                        <div className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary">
-                          <div className="flex-shrink-0">
-                            <item.icon 
-                              className="text-primary group-hover:text-primary/80"
-                              size={14} 
-                            />
-                          </div>
+                    <div className="min-w-0 flex-1 flex items-center justify-between">
+                      <span className="font-light text-foreground group-hover:text-accent-foreground text-xs">
+                        {item.label}
+                      </span>
+                      <FaExternalLinkAlt 
+                        className="text-muted-foreground group-hover:text-primary transition-colors"
+                        size={8}
+                      />
+                    </div>
+                    </button>
+                  ) : (
+                    <Link href={item.href} className="block">
+                    <div className="group relative flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition-all duration-200 text-foreground hover:bg-accent border-l-4 border-transparent hover:border-l-4 hover:border-primary">
+                      <div className="flex-shrink-0">
+                      <item.icon 
+                        className="text-primary group-hover:text-primary/80"
+                        size={14} 
+                      />
+                      </div>
 
-                          <div className="min-w-0 flex-1">
-                            <span className="font-medium text-foreground group-hover:text-accent-foreground text-xs">
-                              {item.label}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    )}
+                      <div className="min-w-0 flex-1">
+                      <span className="font-light text-foreground group-hover:text-accent-foreground text-xs">
+                        {item.label}
+                      </span>
+                      </div>
+                    </div>
+                    </Link>
+                  )}
                   </motion.div>
                 ) : (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
-                    className="group relative"
-                    title={item.label}
-                    key="collapsed"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                  className="group relative"
+                  title={item.label}
+                  key="collapsed"
                   >
-                    {item.isExternal ? (
-                      <button
-                        onClick={() => handleExternalClick(item.href)}
-                        className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent w-full"
-                      >
-                        <div className="flex items-center justify-center">
-                          <item.icon 
-                            className="text-blue-400 group-hover:text-blue-300"
-                            size={16} 
-                          />
-                        </div>
-                      </button>
-                    ) : (
-                      <Link href={item.href}>
-                        <div className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent">
-                          <div className="flex items-center justify-center">
-                            <item.icon 
-                              className="text-primary group-hover:text-primary/80"
-                              size={16} 
-                            />
-                          </div>
-                        </div>
-                      </Link>
-                    )}
+                  {item.isExternal ? (
+                    <button
+                    onClick={() => handleExternalClick(item.href)}
+                    className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent w-full"
+                    >
+                    <div className="flex items-center justify-center">
+                      <item.icon 
+                      className="text-blue-400 group-hover:text-blue-300"
+                      size={16} 
+                      />
+                    </div>
+                    </button>
+                  ) : (
+                    <Link href={item.href}>
+                    <div className="group relative p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent">
+                      <div className="flex items-center justify-center">
+                      <item.icon 
+                        className="text-primary group-hover:text-primary/80"
+                        size={16} 
+                      />
+                      </div>
+                    </div>
+                    </Link>
+                  )}
                   </motion.div>
                 )}
-              </AnimatePresence>
+                </AnimatePresence>
             </motion.div>
           ))}
         </nav>

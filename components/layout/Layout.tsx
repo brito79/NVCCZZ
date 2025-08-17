@@ -55,16 +55,16 @@ function Header() {
         <form
           role="search"
           aria-label="Global search"
-          className="relative hidden min-w-0 flex-1 items-center md:flex"
+          className="relative flex min-w-0 flex-1 items-center justify-center max-w-4xl mx-auto mr-8"
           onSubmit={(e) => e.preventDefault()}
         >
-          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+          <SearchIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
           <input
             type="search"
             name="q"
             placeholder="Search news, markets, people…"
             aria-label="Search"
-            className="w-full rounded-md border border-input bg-background/60 py-2 pl-9 pr-3 text-sm placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-lg border border-input bg-background/60 py-3 pl-12 pr-4 text-base font-medium placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
         </form>
 
