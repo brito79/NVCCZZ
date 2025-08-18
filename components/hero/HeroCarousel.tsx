@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Calendar, ExternalLink } from "lucide-react";
 
 // Hero carousel with autoplay, pause on hover, keyboard navigation, and LQIP placeholders
 // - Uses Next/Image with priority for first slide
@@ -11,11 +12,35 @@ export type HeroSlide = {
   id: string;
   title: string;
   subtitle?: string;
-  image: string; // public path e.g. /hero/finance-1.jpg
+  image: string; // public path e.g. /hero/finance-1.jpg or URL
   alt: string; // accessible alt text
   lqip?: string; // base64 placeholder
   cta?: { label: string; href: string };
+  pubDate?: string; // for feed articles
+  source?: string; // source name
 };
+
+// Utility function to format date nicely
+function formatDate(dateString: string): string {
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  } catch {
+    return dateString;
+  }
+}
+
+// Utility to extract domain from URL
+function getDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace('www.', '');
+  } catch {
+    return 'Source';
+  }
+}
 
 export default function HeroCarousel({ slides, interval = 5000 }: { slides: HeroSlide[]; interval?: number }) {
   const [index, setIndex] = useState(0);
@@ -67,23 +92,37 @@ export default function HeroCarousel({ slides, interval = 5000 }: { slides: Hero
               priority={i < 2}
               sizes="(max-width:768px) 100vw, (max-width:1200px) 100vw, 1200px"
               className="object-cover"
-              placeholder={s.lqip ? "blur" : undefined}
+              placeholder={s.lqip ? "blur" : "empty"}
               blurDataURL={s.lqip}
+              onError={(e) => {
+                // Fallback to a default image if the feed image fails to load
+                const target = e.target as HTMLImageElement;
+                target.src = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80";
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-sky-900/30 via-sky-900/10 to-transparent" aria-hidden="true" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/10" aria-hidden="true" />
 
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8">
-              <div className="max-w-3xl">
-                <h2 className="text-hero-h leading-tight text-white">{s.title}</h2>
-                {s.subtitle && (
-                  <p className="mt-2 max-w-2xl text-hero-sub text-slate-200">{s.subtitle}</p>
+            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+              <div className="max-w-4xl">
+                {/* Publication Date only */}
+                {s.pubDate && (
+                  <div className="mb-2 text-xs text-white/80">
+                    <Calendar className="inline h-3 w-3 mr-1" />
+                    {formatDate(s.pubDate)}
+                  </div>
                 )}
+                
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-white mb-3 line-clamp-2">{s.title}</h2>
+                
                 {s.cta && (
                   <a
                     href={s.cta.href}
-                    className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-cta font-medium text-primary-foreground hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-ring/50"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white hover:bg-white/90 px-4 py-2 text-sm font-medium text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
                   >
                     {s.cta.label}
+                    <ExternalLink className="h-4 w-4" />
                   </a>
                 )}
               </div>

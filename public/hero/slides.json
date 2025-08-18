@@ -2,22 +2,46 @@
   {
     "id": "hero-1",
     "title": "Daily Markets. Clear Signals.",
-    "subtitle": "Big-visual hero with calm overlay. Inspired by Bing News and Apple treatments.",
-    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=3840&q=80",
-    "alt": "Aerial city skyline at dusk with soft light and distant markets mood"
+    "subtitle": "Stay ahead of market movements with real-time financial data and expert analysis from trusted sources worldwide.",
+    "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=3840&q=80",
+    "alt": "Financial charts and analytics dashboard with market data visualization",
+    "source": "NVCCZ",
+    "cta": { "label": "Explore Markets", "href": "/feeds" }
   },
   {
     "id": "hero-2",
     "title": "Zimbabwe Focus. Africa Context.",
-    "subtitle": "Editorial hierarchy and premium spacing for headline overlays.",
-    "image": "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=3840&q=80",
-    "alt": "Hands using a tablet displaying financial charts and analytics"
+    "subtitle": "Comprehensive coverage of Zimbabwe's financial landscape within the broader African economic context and global market trends.",
+    "image": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=3840&q=80",
+    "alt": "Professional business meeting with financial documents and regional market analysis",
+    "source": "NVCCZ",
+    "cta": { "label": "Regional Insights", "href": "/feeds" }
   },
   {
     "id": "hero-3",
     "title": "Personalized Feeds. Enterprise Ready.",
-    "subtitle": "Viva Connections-style cards for announcements and integrations.",
-    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=3840&q=80",
-    "alt": "Abstract soft gradient and bokeh lights for brand-forward backdrop"
+    "subtitle": "Customizable financial news feeds and market intelligence designed for professionals and institutions making informed decisions.",
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=3840&q=80",
+    "alt": "Modern city skyline representing economic growth and business opportunities",
+    "source": "NVCCZ", 
+    "cta": { "label": "Get Started", "href": "/feeds" }
+  },
+  {
+    "id": "hero-4",
+    "title": "Real-time Exchange Rates.",
+    "subtitle": "Live currency exchange rates, central bank data, and monetary policy updates to keep you informed of market movements.",
+    "image": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=3840&q=80",
+    "alt": "Stock market trading floor with real-time price displays and currency exchange data",
+    "source": "RBZ DATA",
+    "cta": { "label": "View Rates", "href": "/feeds" }
+  },
+  {
+    "id": "hero-5",
+    "title": "Market Intelligence Hub.",
+    "subtitle": "Advanced analytics, trend forecasting, and comprehensive market reports to support strategic financial decision-making.",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=3840&q=80",
+    "alt": "Data analytics dashboard with charts, graphs and market intelligence reports",
+    "source": "ANALYTICS",
+    "cta": { "label": "View Analytics", "href": "/feeds" }
   }
 ]

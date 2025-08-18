@@ -14,8 +14,6 @@ import {
   WiThunderstorm,
   WiSnow,
   WiFog,
-  WiHumidity,
-  WiStrongWind,
 } from 'react-icons/wi'
 
 // Types for incoming data (either provided or fetched)
@@ -43,25 +41,15 @@ type WeatherCardProps = {
 
 function pickIcon(condition: string, isNight?: boolean) {
   const c = condition.toLowerCase()
-  if (/thunder|storm/.test(c)) return <WiThunderstorm className="text-blue-400 drop-shadow-lg" size={42} />
-  if (/rain|drizzle/.test(c)) return <WiRain className="text-blue-400 drop-shadow-lg" size={42} />
-  if (/shower/.test(c)) return <WiShowers className="text-blue-400 drop-shadow-lg" size={42} />
-  if (/snow|sleet|hail/.test(c)) return <WiSnow className="text-blue-200 drop-shadow-lg" size={42} />
-  if (/fog|mist|haze|smoke/.test(c)) return <WiFog className="text-gray-300 drop-shadow-lg" size={42} />
-  if (/overcast/.test(c)) return <WiCloudy className="text-gray-300 drop-shadow-lg" size={42} />
-  if (/cloud/.test(c)) return isNight ? <WiNightAltCloudy className="text-indigo-300 drop-shadow-lg" size={42} /> : <WiDayCloudy className="text-sky-300 drop-shadow-lg" size={42} />
-  if (/clear|sun/.test(c)) return isNight ? <WiNightClear className="text-amber-300 drop-shadow-lg" size={42} /> : <WiDaySunny className="text-yellow-400 drop-shadow-lg" size={42} />
-  return isNight ? <WiNightAltCloudy className="text-indigo-300 drop-shadow-lg" size={42} /> : <WiDayCloudy className="text-sky-300 drop-shadow-lg" size={42} />
-}
-
-function formatUpdatedAt(v?: WeatherNow['updatedAt']) {
-  try {
-    if (!v) return '—'
-    const d = typeof v === 'string' || typeof v === 'number' ? new Date(v) : v
-    return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
-  } catch {
-    return '—'
-  }
+  if (/thunder|storm/.test(c)) return <WiThunderstorm className="text-slate-600" size={48} />
+  if (/rain|drizzle/.test(c)) return <WiRain className="text-slate-600" size={48} />
+  if (/shower/.test(c)) return <WiShowers className="text-slate-600" size={48} />
+  if (/snow|sleet|hail/.test(c)) return <WiSnow className="text-slate-600" size={48} />
+  if (/fog|mist|haze|smoke/.test(c)) return <WiFog className="text-slate-600" size={48} />
+  if (/overcast/.test(c)) return <WiCloudy className="text-slate-600" size={48} />
+  if (/cloud/.test(c)) return isNight ? <WiNightAltCloudy className="text-slate-600" size={48} /> : <WiDayCloudy className="text-slate-600" size={48} />
+  if (/clear|sun/.test(c)) return isNight ? <WiNightClear className="text-slate-600" size={48} /> : <WiDaySunny className="text-slate-600" size={48} />
+  return isNight ? <WiNightAltCloudy className="text-slate-600" size={48} /> : <WiDayCloudy className="text-slate-600" size={48} />
 }
 
 export default function WeatherCard({ data, fetchUrl, compact = true, className = '' }: WeatherCardProps) {
@@ -91,7 +79,7 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
     return () => { active = false }
   }, [fetchUrl])
 
-  // Fallback demo data if nothing provided (keeps the card useful in the sidebar)
+  // Fallback demo data if nothing provided
   const view = useMemo<WeatherNow>(() => {
     if (weather) return weather
     return {
@@ -101,8 +89,6 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
       highC: 25,
       lowC: 16,
       feelsLikeC: 21,
-      humidity: 58,
-      windKph: 9,
       updatedAt: Date.now(),
       isNight: false,
     }
@@ -126,52 +112,30 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
         stiffness: 300,
         damping: 30
       }}
-      className={`relative w-full ${compact ? 'max-w-[280px]' : 'max-w-[340px]'} bg-gradient-to-br from-slate-800/90 via-slate-800/70 to-slate-900/90 border border-slate-700/60 rounded-xl p-4 text-gray-100 shadow-2xl shadow-slate-900/50 backdrop-blur-lg overflow-hidden cursor-pointer ${className}`}
+      className={`relative w-full max-w-[240px] sm:max-w-[280px] bg-slate-200 border border-slate-300 rounded-xl p-3 sm:p-4 md:p-6 text-slate-700 shadow-lg hover:shadow-xl transition-shadow overflow-hidden cursor-pointer font-poppins ${className}`}
+      style={{ fontFamily: 'Poppins, sans-serif' }}
       aria-busy={loading}
     >
-      {/* Subtle animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 animate-pulse" />
-      
-      
-      {/* Header */}
-      <div className="relative flex items-start justify-between mb-3">
-        <div className="min-w-0">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-xs font-medium text-blue-400/90 truncate tracking-wide uppercase"
-          >
-            Weather
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-sm font-bold text-white truncate drop-shadow-sm" 
-            title={view.location}
-          >
-            {view.location}
-          </motion.div>
-        </div>
+      {/* Simple header */}
+      <div className="flex items-center justify-center mb-3 sm:mb-4">
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-[10px] text-slate-400 font-medium"
+          transition={{ delay: 0.2 }}
+          className="text-xs sm:text-sm font-normal text-slate-600 tracking-wide uppercase"
         >
-          {formatUpdatedAt(view.updatedAt)}
+          Weather
         </motion.div>
       </div>
 
-      {/* Body */}
-      <div className="relative flex items-center gap-3 mb-4">
+      {/* Main content - Icon and Temperature */}
+      <div className="flex flex-col items-center space-y-3 sm:space-y-4 mb-3 sm:mb-4">
         <motion.div 
-          className="shrink-0"
+          className="flex items-center justify-center"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ 
-            delay: 0.5,
+            delay: 0.3,
             type: "spring",
             stiffness: 200,
             damping: 15
@@ -184,94 +148,75 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
         >
           {icon}
         </motion.div>
-        <div className="leading-none">
-          <div className="flex items-baseline gap-2">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6 }}
-              className="text-3xl font-black drop-shadow-lg bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent"
-            >
-              {Math.round(view.tempC)}°
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="text-xs text-slate-300 font-medium"
-            >
-              {view.condition}
-            </motion.div>
-          </div>
+        
+        <div className="text-center">
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-2 flex items-center gap-2 text-[11px] text-slate-400"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-xl sm:text-3xl md:text-4xl font-normal text-slate-400 mb-1 sm:mb-2"
           >
-            {typeof view.highC === 'number' && <span className="px-1.5 py-0.5 bg-red-500/20 rounded text-red-300">H: {Math.round(view.highC)}°</span>}
-            {typeof view.lowC === 'number' && <span className="px-1.5 py-0.5 bg-blue-500/20 rounded text-blue-300">L: {Math.round(view.lowC)}°</span>}
-            {typeof view.feelsLikeC === 'number' && <span className="text-slate-300">Feels {Math.round(view.feelsLikeC)}°</span>}
+            {Math.round(view.tempC)}°
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="text-xs sm:text-sm md:text-base text-slate-400 font-normal capitalize"
+          >
+            {view.condition}
           </motion.div>
         </div>
       </div>
 
-      {/* Footer mini stats */}
-      <div className="relative grid grid-cols-2 gap-3">
-        <motion.div 
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.9 }}
-          className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg border border-slate-600/20 backdrop-blur-sm"
-        >
-          <WiHumidity className="text-blue-400 drop-shadow-sm" size={18} />
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-white">
-              {typeof view.humidity === 'number' ? `${view.humidity}%` : '—'}
-            </span>
-            <span className="text-[9px] text-slate-400 uppercase tracking-wide">Humidity</span>
-          </div>
-        </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, x: 10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.0 }}
-          className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg border border-slate-600/20 backdrop-blur-sm"
-        >
-          <WiStrongWind className="text-blue-400 drop-shadow-sm" size={18} />
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-white">
-              {typeof view.windKph === 'number' ? `${Math.round(view.windKph)}` : '—'}
-            </span>
-            <span className="text-[9px] text-slate-400 uppercase tracking-wide">km/h</span>
-          </div>
-        </motion.div>
-      </div>
+      {/* Temperature range */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="flex items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-600"
+      >
+        {typeof view.highC === 'number' && (
+          <span className="flex items-center gap-1">
+            <span className="text-slate-500 font-normal">High:</span>
+            <span className="font-normal">{Math.round(view.highC)}°</span>
+          </span>
+        )}
+        {typeof view.lowC === 'number' && (
+          <span className="flex items-center gap-1">
+            <span className="text-slate-500 font-normal">Low:</span>
+            <span className="font-stretch-normal">{Math.round(view.lowC)}°</span>
+          </span>
+        )}
+      </motion.div>
 
-      {/* Loading / Error overlays */}
+      {/* Loading overlay */}
       {loading && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 relative"
+          className="absolute inset-0 bg-slate-200/90 flex flex-col items-center justify-center"
         >
-          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-700/60">
+          <div className="h-1 w-16 sm:w-20 overflow-hidden rounded-full bg-slate-300 mb-2">
             <motion.div 
-              className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500"
+              className="h-full bg-slate-600"
               animate={{ x: ['-100%', '100%'] }}
               transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
             />
           </div>
-          <div className="text-center mt-2 text-xs text-slate-400">Loading weather...</div>
+          <div className="text-xs text-slate-600 font-normal">Loading weather...</div>
         </motion.div>
       )}
+      
+      {/* Error overlay */}
       {error && (
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg"
+          className="absolute inset-x-3 sm:inset-x-4 bottom-3 sm:bottom-4 px-3 py-2 bg-red-100 border border-red-200 rounded-lg"
         >
-          <div className="text-[11px] text-red-400 font-medium">{error}</div>
+          <div className="text-xs text-red-600 font-normal text-center">{error}</div>
         </motion.div>
       )}
     </motion.div>
