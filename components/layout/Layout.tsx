@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-
 import { Bell, Search as SearchIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 const ProfileMenu = dynamic(() => import("../ProfileMenu"), { ssr: false });
 import { ReactNode } from "react";
+import TickerBarClient from "../ticker/TickerBarClient";
 
 // Accessible site layout with Header / Main / Footer
 // - Includes skip link, keyboard focus styles, and global search
@@ -18,29 +18,34 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Skip link for keyboard users */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
-      >
-        Skip to main content
-      </a>
+    <>
+      <TickerBarClient />
 
-      <Header />
+      <div className="min-h-screen bg-background text-foreground">
+        {/* Skip link for keyboard users */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+        >
+          Skip to main content
+        </a>
 
-      <main id="main-content" className="w-full">
-        {children}
-      </main>
+        <Header />
 
-      <Footer />
-    </div>
+        <main id="main-content" className="w-full">
+          {children}
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 }
 
 function Header() {
   return (
-    <header
+  
+      <header
       className="sticky top-0 z-40 border-b border-border/60 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/60"
       role="banner"
     >
@@ -82,6 +87,7 @@ function Header() {
         </div>
       </div>
     </header>
+    
   );
 }
 
@@ -104,12 +110,12 @@ function Footer() {
           <Link href="/" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
             Home
           </Link>
-          <a href="#" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
+          {/* <a href="#" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
             Privacy
           </a>
           <a href="#" className="hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-sm px-1">
             Terms
-          </a>
+          </a> */}
         </nav>
       </div>
     </footer>
