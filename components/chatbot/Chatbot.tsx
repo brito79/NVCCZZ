@@ -306,14 +306,14 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
         >
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-[600px] flex flex-col overflow-hidden">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-100 to-blue-200 text-black-100 p-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                   <Bot size={16} />
                 </div>
                 <div>
                   <h3 className="font-semibold">NVCCZ Assistant</h3>
-                  <p className="text-xs text-blue-100">Online</p>
+                  <p className="text-xs">Online</p>
                 </div>
               </div>
               <button
@@ -337,14 +337,14 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
                   <div className={`flex items-start space-x-2 max-w-[80%] ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       message.isUser 
-                        ? 'bg-blue-600 text-white' 
+                        ? 'bg-blue-100 text-white' 
                         : 'bg-gray-200 text-gray-600'
                     }`}>
                       {message.isUser ? <User size={16} /> : <Bot size={16} />}
                     </div>
                     <div className={`rounded-2xl px-3 py-2 ${
                       message.isUser
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-blue-100 text-white'
                         : 'bg-white text-gray-800 border border-gray-200'
                     }`}>
                       <p className="text-sm leading-relaxed">{message.text}</p>
@@ -427,7 +427,7 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
                     <button
                       onClick={handleTextInput}
                       disabled={!inputValue.trim()}
-                      className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                      className="px-3 py-2 bg-blue-100 text-black rounded-lg hover:bg-blue-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
                       Send
                     </button>

@@ -20,7 +20,7 @@ const ChatButton = ({ isOpen, onToggle, position = 'bottom-right' }: ChatButtonP
   return (
     <motion.button
       onClick={onToggle}
-      className={`fixed ${positionClasses[position]} z-40 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center`}
+      className={`fixed ${positionClasses[position]} z-40 w-14 h-14 bg-blue-300 text-black-300 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center`}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       initial={{ opacity: 0, scale: 0 }}

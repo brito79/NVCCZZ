@@ -1,10 +1,9 @@
-import { TickerStrip } from "./TickerBar"
-import { sampleExchangeData } from "@/lib/constants"
+import TickerStrip from "./TickerBar"
 
 export default function TickerBarClient() {
   return (
     <div className="w-full">
-      <TickerStrip data={sampleExchangeData} />
+      <TickerStrip />
     </div>
   )
 }

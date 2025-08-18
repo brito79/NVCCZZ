@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { fetchRbzExchangeRates, type FinalExchangeRateResponse } from "@/pages/api/rbz-exchange-rates"
+import { sampleExchangeData } from "@/lib/constants"
 
 export type FormattedExchangeRate = {
   currency: string
@@ -11,27 +11,56 @@ export type FormattedExchangeRate = {
   avg: number | string
 }
 
-export type FinalExchangeRateResponse = {
-  status: string
-  date: string // formatted DD-MM-YYYY
-  timestamp: string
-  source: string
-  url: string
-  exchange_rates: FormattedExchangeRate[]
-}
-
 interface TickerStripProps {
-  data: FinalExchangeRateResponse
   className?: string
 }
 
-export function TickerStrip({ data, className = "" }: TickerStripProps) {
+export function TickerStrip({ className = "" }: TickerStripProps) {
   const [isPaused, setIsPaused] = useState(false)
+  const [data, setData] = useState<FinalExchangeRateResponse>(sampleExchangeData)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
+
+  // Fetch data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true)
+        const result = await fetchRbzExchangeRates()
+        
+        if (result.success && result.data) {
+          // Filter out header row if it exists
+          const filteredRates = result.data.exchange_rates.filter(
+            rate => !(rate.currency === "CURRENCY" && rate.bid === "BID")
+          )
+          
+          setData({
+            ...result.data,
+            exchange_rates: filteredRates
+          })
+          setError(null)
+        } else {
+          // Use fallback data if API fails
+          setData(sampleExchangeData)
+          setError(result.error || "Failed to fetch exchange rates")
+        }
+      } catch (err) {
+        // Use fallback data on error
+        setData(sampleExchangeData)
+        setError("Failed to fetch exchange rates")
+        console.error("Error loading exchange rates:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
 
   // Auto-scroll animation
   useEffect(() => {
-    if (!tickerRef.current || isPaused) return
+    if (!tickerRef.current || isPaused || isLoading) return
 
     const scrollWidth = tickerRef.current.scrollWidth / 2 // Divide by 2 since we duplicate content
     let scrollPosition = 0
@@ -49,7 +78,7 @@ export function TickerStrip({ data, className = "" }: TickerStripProps) {
     const intervalId = setInterval(scroll, 20) // 50fps
 
     return () => clearInterval(intervalId)
-  }, [isPaused])
+  }, [isPaused, isLoading])
 
   const formatValue = (value: number | string): string => {
     if (typeof value === "string") return value
@@ -65,8 +94,32 @@ export function TickerStrip({ data, className = "" }: TickerStripProps) {
     return "text-black"
   }
 
+  if (isLoading) {
+    return (
+      <div className={`relative bg-slate-100 border-b border-slate-200 ${className}`}>
+        <div className="py-3 px-4">
+          <div className="flex items-center gap-6">
+            <div className="animate-pulse flex gap-4">
+              <div className="h-4 w-16 bg-slate-300 rounded"></div>
+              <div className="h-4 w-20 bg-slate-300 rounded"></div>
+              <div className="h-4 w-20 bg-slate-300 rounded"></div>
+              <div className="h-4 w-20 bg-slate-300 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={`relative bg-slate-100 border-b border-slate-200 overflow-hidden ${className}`}>
+      {/* Error indicator (if using fallback data) */}
+      {error && (
+        <div className="absolute top-1 left-4 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+          Using sample data - {error}
+        </div>
+      )}
+
       {/* Ticker Content */}
       <div 
         className="py-3 px-4" 
@@ -102,10 +155,11 @@ export function TickerStrip({ data, className = "" }: TickerStripProps) {
         </div>
       </div>
 
-      {/* Status Info */}
+      {/* Status Info
       <div className="absolute top-2 right-4 text-xs text-slate-500">
         Updated: {data.date} | Source: {data.source}
-      </div>
+        {error && " (Fallback Data)"}
+      </div> */}
 
       {/* Gradient overlays for smooth fade */}
       <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-100 to-transparent pointer-events-none z-10" />
@@ -113,3 +167,6 @@ export function TickerStrip({ data, className = "" }: TickerStripProps) {
     </div>
   )
 }
+
+// Also export as default for easier importing
+export default TickerStrip
