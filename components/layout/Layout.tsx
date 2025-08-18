@@ -47,8 +47,8 @@ function Header() {
       <div className="flex min-h-14 w-full flex-wrap items-center justify-between gap-3 px-4">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-ring/50 rounded-md">
-          <div className="h-8 w-8 rounded-md bg-gradient-to-br from-sky-600 to-indigo-600" aria-hidden="true" />
-          <span className="text-sm font-semibold tracking-tight">NVCCZ</span>
+          <div className="h-8 w-8 rounded-md bg-gradient-to-br from-sky-600 to-indigo-300" aria-hidden="true" />
+          <span className="text-medium font-semibold tracking-tight">Niakazi</span>
         </Link>
 
         {/* Global search */}

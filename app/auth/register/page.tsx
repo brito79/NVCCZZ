@@ -8,10 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ChatbotProvider } from '@/components/chatbot';
 
-// Ensure Poppins in globals.css:
-// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-// html, body { font-family: 'Poppins', sans-serif; }
-
 const RegisterPage = () => {
   const router = useRouter();
 
@@ -60,9 +56,8 @@ const RegisterPage = () => {
       const data = await res.json();
 
       if (data?.success) {
-        setSuccess('Account created successfully. Redirecting to login…');
-        // Optionally auto-login or redirect
-        setTimeout(() => router.push('/login'), 900);
+        setSuccess('Account created successfully. Redirecting…');
+        setTimeout(() => router.push('/auth/login'), 900);
       } else {
         setError(data?.message || 'Registration failed.');
       }
@@ -73,15 +68,10 @@ const RegisterPage = () => {
     }
   };
 
-  // Simple strength hint
-  const strengthHint =
-    password.length >= 12 ? 'Strong' :
-    password.length >= 8 ? 'Good' : 'Weak';
-
   return (
     <ChatbotProvider position="bottom-left">
       <div className="relative min-h-screen overflow-hidden font-poppins">
-        {/* Background image */}
+        {/* ===== Background Image ===== */}
         <motion.div
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -89,8 +79,8 @@ const RegisterPage = () => {
           className="absolute inset-0 -z-10"
         >
           <Image
-            src="/login/bg-login.jpg"  // update extension if needed
-            alt=""
+            src="/login/bg-register.png"
+            alt="Background"
             fill
             priority
             sizes="100vw"
@@ -98,18 +88,20 @@ const RegisterPage = () => {
           />
         </motion.div>
 
-        {/* Blue/Gray overlay */}
+        {/* Overlay for contrast */}
         <motion.div
           aria-hidden
           className="absolute inset-0 -z-10"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.9 }}
+          animate={{ opacity: 0.85 }}
           transition={{ duration: 0.8 }}
           style={{
             background:
-              'linear-gradient(135deg, rgba(0,86,164,0.45), rgba(203,213,225,0.55))',
+              'linear-gradient(135deg, rgba(0,86,164,0.5), rgba(203,213,225,0.5))',
           }}
         />
+
+        {/* Floating light patterns */}
         <div
           className="absolute inset-0 -z-10 pointer-events-none animate-slow-shift"
           style={{
@@ -118,7 +110,7 @@ const RegisterPage = () => {
           }}
         />
 
-        {/* Content */}
+        {/* ===== Content ===== */}
         <div className="flex items-center justify-center min-h-screen p-4">
           <motion.div
             initial={{ opacity: 0, y: 22 }}
@@ -137,9 +129,7 @@ const RegisterPage = () => {
                 <h1 className="text-4xl font-light text-black mb-2 tracking-wide">
                   Create your account
                 </h1>
-                <p className="text-lg text-gray-700">
-                  Join NVCCZ and get started
-                </p>
+                <p className="text-lg text-gray-700">Join NVCCZ and get started</p>
               </div>
 
               {error && (
@@ -162,22 +152,19 @@ const RegisterPage = () => {
                 </motion.div>
               )}
 
+              {/* ===== Form ===== */}
               <form className="space-y-6" onSubmit={handleSubmit}>
                 {/* Full Name */}
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                  <label htmlFor="fullName" className="block text-lg font-light text-black mb-1">
+                <motion.div>
+                  <label className="block text-lg font-light text-black mb-1">
                     Full Name
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <User className="h-5 w-5 text-gray-500" />
-                    </div>
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                     <input
-                      id="fullName"
-                      name="fullName"
                       type="text"
                       required
-                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] focus:border-transparent transition"
+                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] transition"
                       placeholder="Jane Doe"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
@@ -185,20 +172,16 @@ const RegisterPage = () => {
                   </div>
                 </motion.div>
 
-                {/* Phone (optional) */}
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
-                  <label htmlFor="phone" className="block text-lg font-light text-black mb-1">
+                {/* Phone */}
+                <motion.div>
+                  <label className="block text-lg font-light text-black mb-1">
                     Phone (optional)
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Phone className="h-5 w-5 text-gray-500" />
-                    </div>
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                     <input
-                      id="phone"
-                      name="phone"
                       type="tel"
-                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] focus:border-transparent transition"
+                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] transition"
                       placeholder="+263 7x xxx xxxx"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -207,20 +190,16 @@ const RegisterPage = () => {
                 </motion.div>
 
                 {/* Email */}
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
-                  <label htmlFor="email" className="block text-lg font-light text-black mb-1">
+                <motion.div>
+                  <label className="block text-lg font-light text-black mb-1">
                     Email Address
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-gray-500" />
-                    </div>
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                     <input
-                      id="email"
-                      name="email"
                       type="email"
                       required
-                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] focus:border-transparent transition"
+                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] transition"
                       placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -229,45 +208,34 @@ const RegisterPage = () => {
                 </motion.div>
 
                 {/* Password */}
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}>
-                  <label htmlFor="password" className="block text-lg font-light text-black mb-1">
+                <motion.div>
+                  <label className="block text-lg font-light text-black mb-1">
                     Password
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-500" />
-                    </div>
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                     <input
-                      id="password"
-                      name="password"
                       type="password"
                       required
-                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] focus:border-transparent transition"
+                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] transition"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  <div className="mt-1 text-sm text-gray-600">
-                    Strength: {strengthHint}
-                  </div>
                 </motion.div>
 
                 {/* Confirm Password */}
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-                  <label htmlFor="confirm" className="block text-lg font-light text-black mb-1">
+                <motion.div>
+                  <label className="block text-lg font-light text-black mb-1">
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-500" />
-                    </div>
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                     <input
-                      id="confirm"
-                      name="confirm"
                       type="password"
                       required
-                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] focus:border-transparent transition"
+                      className="block w-full pl-10 pr-3 py-3 rounded-lg bg-gray-100 border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0056A4] transition"
                       placeholder="••••••••"
                       value={confirm}
                       onChange={(e) => setConfirm(e.target.value)}
@@ -276,10 +244,9 @@ const RegisterPage = () => {
                 </motion.div>
 
                 {/* Terms */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }} className="flex items-start gap-2">
+                <motion.div className="flex items-start gap-2">
                   <input
                     id="agree"
-                    name="agree"
                     type="checkbox"
                     checked={agree}
                     onChange={(e) => setAgree(e.target.checked)}
@@ -294,22 +261,22 @@ const RegisterPage = () => {
                 </motion.div>
 
                 {/* Submit */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
+                <motion.div>
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full flex justify-center py-3 px-4 rounded-lg shadow-md text-lg font-semibold text-white bg-[#0056A4] hover:bg-[#064f94] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0056A4] transition-colors duration-300 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    className={`w-full flex justify-center py-3 px-4 rounded-lg shadow-md text-lg font-semibold text-white bg-[#0056A4] hover:bg-[#064f94] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0056A4] transition ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
                     {loading ? 'Creating account…' : 'Create account'}
                   </button>
                 </motion.div>
               </form>
 
-              {/* Login link */}
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }} className="mt-6 text-center">
+              {/* Sign in link */}
+              <motion.div className="mt-6 text-center">
                 <p className="text-lg text-gray-700">
                   Already have an account?{' '}
-                  <Link href="/login" className="font-medium text-[#0056A4] hover:underline">
+                  <Link href="/auth/login" className="font-medium text-[#0056A4] hover:underline">
                     Sign in
                   </Link>
                 </p>
@@ -318,11 +285,11 @@ const RegisterPage = () => {
           </motion.div>
         </div>
 
-        {/* Local styles for background animation (same as Login) */}
+        {/* Background subtle motion */}
         <style jsx>{`
           @keyframes slowShift {
-            0%   { transform: translate3d(0,0,0); }
-            50%  { transform: translate3d(-1.5%, -1.5%, 0); }
+            0% { transform: translate3d(0,0,0); }
+            50% { transform: translate3d(-1.5%, -1.5%, 0); }
             100% { transform: translate3d(0,0,0); }
           }
           .animate-slow-shift {
@@ -335,3 +302,4 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
