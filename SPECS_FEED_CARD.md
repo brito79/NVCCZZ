@@ -1,6 +1,6 @@
 # Feed Card Specification
 
-- **Container**: rounded-2xl, 1px border, backdrop blur, hover border highlight
+- **Container**: rounded-2xl, 1px border, backdrop blur, hover border highligh
 - **Image Variant**:
   - Media: 48vh cap, object-cover
   - Top-left source icon (non-interactive)
