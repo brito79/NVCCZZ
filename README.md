@@ -6,7 +6,7 @@
 - Use slides from `/api/hero` or `public/hero/slides.json`
 
 ## Feed Card Spec
-- Container: rounded-lg/xl, border 1px, hover elevation
+- Container: rounded-lg/xl, border 1px, hover elevations
 - Spacing: 16px inner (image card), 24px inner (text card)
 - Type: title (lg–xl, semibold–bold), snippet (sm, relaxed), meta (xs)
 - Actions: Read More link (accessible label), card focus ring on keyboard
