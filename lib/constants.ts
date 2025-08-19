@@ -1,11 +1,11 @@
-export const API_BASE_URL = "https://9219bb1d34fa.ngrok-free.app";
+export const API_BASE_URL = "https://ad0f7e628a34.ngrok-free.app";
 
 export const sampleExchangeData = {
    status: "success",
   date: "18-08-2025",
   timestamp: "2025-08-18T10:30:00Z",
   source: "Exchange API",
-  url: "https://9219bb1d34fa.ngrok-free.app/api/rbz/exchange-rates",
+  url: "https://ad0f7e628a34.ngrok-free.app/api/rbz/exchange-rates",
   exchange_rates: [
     { currency: "USD/EUR", bid: 0.8456, ask: 0.8459, avg: 0.8457 },
     { currency: "GBP/USD", bid: 1.2734, ask: 1.2738, avg: 1.2736 },

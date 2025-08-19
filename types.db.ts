@@ -107,17 +107,16 @@ export interface ForexData {
 
 
 export type ExchangeRate = {
-  ask: number;
-  avg: number;
-  bid: number;
-  currency: string;
+  currency: string;     // e.g. "Zimbabwe Gold"
+  mid_rate: number;     // e.g. 26.7605
+  pair: string;         // e.g. "1USD-ZiG"
+  we_buy: number;       // e.g. 25.9577
+  we_sell: number;      // e.g. 28.6337
 };
 
 export type BankRatesResponse = {
-  date: string;
+ date: string;              // formatted date, e.g. "08 Aug 2025"
+  date_iso: string;          // ISO date, e.g. "2025-08-08"
   exchange_rates: ExchangeRate[];
-  source: string;
-  status: string;
-  timestamp: string;
 };
   
