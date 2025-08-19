@@ -457,7 +457,7 @@ const FeedPage = () => {
                   // Prioritize filling with image content first, then text content
                   if (imageIndex < feedsWithImages.length) {
                     const feed = feedsWithImages[imageIndex];
-                    let colSpan, rowSpan, size;
+                    let colSpan: string, rowSpan: string, size: 'small' | 'medium' | 'large' | 'featured';
 
                     // Smarter tile sizing to reduce gaps
                     if (feedItemIndex === 0) {
