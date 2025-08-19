@@ -10,7 +10,7 @@
 - Height: ~44vw (min 240px)
 - Headline: 24–28px, Subhead: 14–16px
 - Safe padding: 16–24px
-- Dots comfortably tappable
+- Dots comfortably tappableei
 
 ## Implementation
 - Component: `components/hero/HeroCarousel.tsx`
