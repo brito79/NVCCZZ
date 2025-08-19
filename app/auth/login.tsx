@@ -205,12 +205,7 @@ const LoginPage = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="w-full max-w-md mb-8 text-center text-white"
         >
-          <div className="bg-black/20 backdrop-blur-sm py-4 px-6 rounded-2xl inline-block">
-            <h1 className="text-4xl font-bold mb-3 text-shadow-lg drop-shadow-md text-white">Welcome Back</h1>
-            <p className="text-lg font-medium text-white text-shadow-lg drop-shadow-md">
-              Access your NVCCZ Financial Hub account
-            </p>
-          </div>
+         
         </motion.div>
         
         <motion.div
@@ -220,7 +215,7 @@ const LoginPage = () => {
           className="w-full max-w-md relative"
         >
           {/* Card glow effect */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-30 animate-pulse"></div>
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-200 to-blue-400 rounded-2xl blur opacity-30 animate-pulse"></div>
           
           <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 overflow-hidden">
             {/* Decorative elements */}
