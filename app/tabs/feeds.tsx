@@ -27,6 +27,7 @@ import { categories, isFinancialOrEconomic, categorizeByRegion } from "@/utils/f
 import ZimFinancialData from "@/components/MenuAllFinancialData";
 import FloatingRBZData from "@/components/rss-feeds/FloatingRBZData";
 import WeatherCard from "@/components/rss-feeds/sidebar/WeatherCard";
+import { TickerStrip } from "@/components/ticker/TickerBar";
 
 // ---------------------------------------------------------------------------
 // Fetcher
@@ -63,34 +64,45 @@ const CombinedRateCard = ({
   const list = currentView === "crypto" ? cryptoData : forexData;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-800/60 p-3 shadow-[0_8px_30px_rgba(2,6,23,0.35)] backdrop-blur-xl transition-all duration-300 hover:border-slate-600">
+    <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/90 via-indigo-800/90 to-purple-900/90 p-4 shadow-[0_8px_30px_rgba(79,70,229,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
+      {/* Animated background effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 via-purple-600/5 to-blue-600/10 opacity-30" />
+      <div className="absolute -inset-[100%] animate-[spin_60s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(56,189,248,0.1)_360deg)] blur-3xl" />
+      
       {/* Header */}
-      <div className="mb-2 flex items-center justify-between">
+      <div className="relative mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300">
-            <DollarSign size={16} />
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
+            <DollarSign size={18} />
           </span>
-          <h3 className="text-sm font-semibold text-white">
-            {getCurrentTitle()}
-            {isCurrentlyLoading() && (
-              <span className="ml-2 inline-block align-middle">
-                <span className="h-3 w-3 animate-spin rounded-full border-b-2 border-t-2 border-sky-300" />
-              </span>
-            )}
-          </h3>
+          <div>
+            <h3 className="text-base font-semibold text-white">
+              {getCurrentTitle()}
+            </h3>
+            <p className="text-xs text-indigo-200/80">Live market rates</p>
+          </div>
+          {isCurrentlyLoading() && (
+            <span className="ml-2 inline-block align-middle">
+              <span className="h-4 w-4 animate-spin rounded-full border-b-2 border-t-2 border-indigo-300" />
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => switchView("crypto")}
-            className={`h-2 w-2 rounded-full transition-all ${
-              currentView === "crypto" ? "bg-sky-400 shadow-[0_0_0_4px_rgba(56,189,248,0.15)]" : "bg-slate-500 hover:bg-slate-400"
+            className={`h-3 w-3 rounded-full transition-all ${
+              currentView === "crypto" 
+                ? "bg-indigo-400 shadow-[0_0_0_4px_rgba(129,140,248,0.3)]" 
+                : "bg-indigo-700 hover:bg-indigo-600"
             }`}
             aria-label="Show crypto"
           />
           <button
             onClick={() => switchView("forex")}
-            className={`h-2 w-2 rounded-full transition-all ${
-              currentView === "forex" ? "bg-sky-400 shadow-[0_0_0_4px_rgba(56,189,248,0.15)]" : "bg-slate-500 hover:bg-slate-400"
+            className={`h-3 w-3 rounded-full transition-all ${
+              currentView === "forex" 
+                ? "bg-indigo-400 shadow-[0_0_0_4px_rgba(129,140,248,0.3)]" 
+                : "bg-indigo-700 hover:bg-indigo-600"
             }`}
             aria-label="Show forex"
           />
@@ -98,70 +110,72 @@ const CombinedRateCard = ({
       </div>
 
       {/* List */}
-      <AnimatePresence mode="wait">
-        <motion.ul
-          key={currentView}
-          initial={{ opacity: 0, y: 8, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -6, scale: 0.98 }}
-          transition={{ duration: 0.18 }}
-          className={`divide-y divide-slate-700/50 ${isTransitioning ? "pointer-events-none opacity-60" : "opacity-100"}`}
-        >
-          {list.map((item, idx) => (
-            <li
-              key={`${currentView}-${idx}`}
-              className="flex min-h-[40px] items-center justify-between gap-2 py-2 pl-2 pr-1 transition-colors hover:bg-slate-700/40"
-            >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-medium text-slate-200">
-                  {currentView === "crypto" ? item.symbol : item.pair}
-                </p>
-              </div>
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="min-w-0 truncate text-right text-xs font-bold text-white">
-                  {currentView === "crypto" ? item.price : item.rate}
-                </span>
-                <span
-                  className={`inline-flex min-w-0 items-center truncate rounded-full px-1.5 py-0.5 text-[11px] font-medium ${
-                    item.trend === "up"
-                      ? "bg-emerald-400/10 text-emerald-400"
-                      : item.trend === "down"
-                      ? "bg-rose-400/10 text-rose-400"
-                      : "text-slate-300"
-                  }`}
-                >
-                  {item.trend === "up" ? (
-                    <TrendingUp className="mr-1 h-3 w-3 flex-shrink-0" />
-                  ) : item.trend === "down" ? (
-                    <TrendingDown className="mr-1 h-3 w-3 flex-shrink-0" />
-                  ) : null}
-                  <span className="truncate">{item.change}</span>
-                </span>
-              </div>
-            </li>
-          ))}
-        </motion.ul>
-      </AnimatePresence>
+      <div className="relative rounded-xl bg-indigo-950/30 p-2 backdrop-blur-sm">
+        <AnimatePresence mode="wait">
+          <motion.ul
+            key={currentView}
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.18 }}
+            className={`divide-y divide-indigo-800/50 ${isTransitioning ? "pointer-events-none opacity-60" : "opacity-100"}`}
+          >
+            {list.map((item, idx) => (
+              <li
+                key={`${currentView}-${idx}`}
+                className="flex min-h-[42px] items-center justify-between gap-2 rounded-lg py-2 px-3 transition-colors hover:bg-indigo-800/30"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-indigo-100">
+                    {currentView === "crypto" ? item.symbol : item.pair}
+                  </p>
+                </div>
+                <div className="flex min-w-0 items-center gap-2">
+                  <span className="min-w-0 truncate text-right text-sm font-bold text-white">
+                    {currentView === "crypto" ? item.price : item.rate}
+                  </span>
+                  <span
+                    className={`inline-flex min-w-0 items-center truncate rounded-full px-2 py-0.5 text-xs font-medium ${
+                      item.trend === "up"
+                        ? "bg-emerald-500/20 text-emerald-300"
+                        : item.trend === "down"
+                        ? "bg-rose-500/20 text-rose-300"
+                        : "text-indigo-200"
+                    }`}
+                  >
+                    {item.trend === "up" ? (
+                      <TrendingUp className="mr-1 h-3 w-3 flex-shrink-0" />
+                    ) : item.trend === "down" ? (
+                      <TrendingDown className="mr-1 h-3 w-3 flex-shrink-0" />
+                    ) : null}
+                    <span className="truncate">{item.change}</span>
+                  </span>
+                </div>
+              </li>
+            ))}
+          </motion.ul>
+        </AnimatePresence>
+      </div>
 
       {/* Nav controls (mobile friendly) */}
-      <div className="mt-2 flex items-center justify-between">
+      <div className="relative mt-3 flex items-center justify-between">
         <button
           onClick={() => switchView(currentView === "crypto" ? "forex" : "crypto")}
-          className="rounded-lg border border-slate-600 bg-slate-700/50 px-2 py-1 text-xs text-slate-200 hover:border-sky-500 hover:bg-slate-700"
+          className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all hover:shadow-lg"
         >
-          Toggle View
+          {currentView === "crypto" ? "View Forex" : "View Crypto"}
         </button>
         <div className="flex items-center gap-1">
           <button
             onClick={() => switchView("crypto")}
-            className="rounded-full p-1 text-slate-300 hover:bg-slate-700 hover:text-white"
+            className="rounded-full bg-indigo-800/50 p-1.5 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
             aria-label="Crypto"
           >
             <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => switchView("forex")}
-            className="rounded-full p-1 text-slate-300 hover:bg-slate-700 hover:text-white"
+            className="rounded-full bg-indigo-800/50 p-1.5 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
             aria-label="Forex"
           >
             <ChevronRight size={16} />
@@ -187,7 +201,7 @@ const FeedPage = () => {
     fetcher
   );
 
-  const [selectedCategory, setSelectedCategory] = useState("zimbabwean");
+  const [selectedCategory, setSelectedCategory] = useState("african");
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(12); // infinite-scroll placeholder
 
@@ -285,10 +299,10 @@ const FeedPage = () => {
             <div className="flex items-center gap-3">
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-600 shadow-md" />
               <div>
-                <h1 className="text-lg font-medium tracking-tight text-foreground sm:text-base">
+                <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-base">
                   NVCCZ Financial Feeds
                 </h1>
-                <p className="text-[11px] text-muted-foreground">Curated informatics • live rates</p>
+                <p className="text-[11px] font-medium text-foreground">Curated informatics • live rates</p>
               </div>
             </div>
             <button
@@ -302,120 +316,200 @@ const FeedPage = () => {
         </div>
       </header>
 
+      {/* Currency Ticker */}
+      <section className="mx-auto max-w-7xl px-2 sm:px-3">
+        <div className="mb-1 mt-3">
+          <h2 className="text-sm font-semibold tracking-tight text-foreground">
+            Live Exchange Rates <span className="text-slate-400">(RBZ Official Rates)</span>
+          </h2>
+        </div>
+        <div className="mb-3">
+          <TickerStrip className="rounded-xl shadow-sm" />
+        </div>
+      </section>
+
       {/* RBZ + Summary modules */}
       <section className="mx-auto max-w-7xl px-2 py-2 sm:px-3">
         {/* <div className="mb-2"><FloatingRBZData /></div> */}
         <div className="mb-2"><ZimFinancialData /></div>
       </section>
 
-      {/* Main layout */}
-      <main className="mx-auto max-w-7xl gap-3 px-2 pb-6 sm:px-3 lg:grid lg:grid-cols-5">
-        {/* Sidebar */}
-        <aside className="order-2 mt-3 space-y-3 lg:order-1 lg:col-span-2 lg:mt-0 lg:pr-2 xl:col-span-1">
-          <CombinedRateCard
-            cryptoData={rates.crypto}
-            forexData={rates.forex}
-            cryptoLoading={cryptoLoading}
-            forexLoading={forexLoading}
-          />
-          <div className="rounded-2xl border border-input bg-card/80 p-3 shadow-sm backdrop-blur">
-            <WeatherCard />
-          </div>
-          {/* Optional: bank rates card */}
-          {/* <BankRatesCard data={bankRatesData} isLoading={bankRatesLoading} /> */}
-        </aside>
-
-        {/* Content */}
-        <section className="order-1 lg:order-2 lg:col-span-3 xl:col-span-4">
-          {/* Search & Filters */}
-          <div className="rounded-2xl border border-input bg-card/80 p-3 shadow-sm backdrop-blur">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                <input
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  type="text"
-                  placeholder="Search financial news…"
-                  className="w-full rounded-xl border border-input bg-background/60 py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-                />
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Filter size={16} /> Filter
-              </div>
+      {/* Main layout - Dynamic Magazine Grid */}
+      <main className="mx-auto max-w-7xl px-2 pb-6 sm:px-3">
+        {/* Search & Filters */}
+        <div className="mb-4 rounded-2xl border border-input bg-card/80 p-3 shadow-sm backdrop-blur">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                type="text"
+                placeholder="Search financial news…"
+                className="w-full rounded-xl border border-input bg-background/60 py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+              />
             </div>
-
-            {/* Category pills (scrollable on mobile) */}
-            <div className="mt-2 flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`snap-start inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition-all ${
-                    selectedCategory === category.id
-                      ? "bg-sky-600 text-white shadow"
-                      : "bg-slate-900/40 text-slate-300 hover:bg-slate-800/60"
-                  }`}
-                >
-                  {category.id === "zimbabwean" ? (
-                    <ZW className="h-4 w-4" />
-                  ) : category.id === "african" ? (
-                    <MapPin size={16} />
-                  ) : (
-                    <Globe size={16} />
-                  )}
-                  <span className="font-medium">{category.name}</span>
-                </button>
-              ))}
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Filter size={16} /> Filter
             </div>
           </div>
 
-          {/* Count */}
-          <div className="mb-2 mt-3">
-            <h2 className="text-sm font-semibold tracking-tight text-foreground">
-              Latest News <span className="text-slate-400">({filteredFeeds.length} articles)</span>
-            </h2>
-          </div>
-
-          {/* Feed grid */}
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-busy={feedsLoading}>
-            {filteredFeeds.slice(0, visibleCount).map((feed, idx) => (
-              <motion.div
-                key={feed.guid || idx}
-                initial={{ y: 10, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="[--x:50%] [--y:50%] group relative overflow-hidden rounded-2xl border border-input bg-card/80 p-2 shadow-sm backdrop-blur transition-all hover:border-primary/50"
+          {/* Category pills (scrollable on mobile) */}
+          <div className="mt-2 flex snap-x gap-2 overflow-x-auto pb-3 scrollbar-container">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`snap-start inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition-all ${
+                  selectedCategory === category.id
+                    ? "bg-primary-600 text-white shadow-md"
+                    : "bg-primary-100 text-primary-700 hover:bg-primary-200"
+                }`}
               >
-                <FeedCard feed={feed} />
-                {/* hover shimmer */}
-                <div className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" style={{ background: "radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(56,189,248,.10), transparent 40%)" }} />
-              </motion.div>
+                {category.id === "african" ? (
+                  <MapPin size={16} />
+                ) : (
+                  <Globe size={16} />
+                )}
+                <span className="font-medium">{category.name}</span>
+              </button>
             ))}
           </div>
+        </div>
 
-          {/* Load more fallback */}
-          {visibleCount < filteredFeeds.length && (
-            <div className="mt-4 flex justify-center">
-              <button
-                onClick={() => setVisibleCount((c) => c + 9)}
-                className="rounded-md border border-input bg-card/80 px-4 py-2 text-sm text-foreground hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
-              >
-                Load more
-              </button>
-            </div>
-          )}
+        {/* Count */}
+        <div className="mb-3">
+          <h2 className="text-sm font-semibold tracking-tight text-foreground">
+            Latest News <span className="text-slate-400">({filteredFeeds.length} articles)</span>
+          </h2>
+        </div>
 
-          {/* Empty state */}
-          {filteredFeeds.length === 0 && !feedsLoading && (
-            <div className="grid place-items-center py-10 text-center">
-              <Newspaper className="mb-3 h-14 w-14 text-muted-foreground" />
-              <h3 className="text-base font-medium text-foreground">No articles found</h3>
-              <p className="text-sm text-muted-foreground">Try adjusting your search terms or filters</p>
+        {/* Dynamic Magazine Grid Layout */}
+        {filteredFeeds.length > 0 && !feedsLoading && (
+          <>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-12" aria-live="polite" aria-busy={feedsLoading}>
+              {/* Featured Article - First article with image gets featured placement */}
+              {filteredFeeds.some(feed => feed.imageUrl || (feed.enclosure && feed.enclosure.url)) && (
+                <div className="md:col-span-8 md:row-span-2">
+                  <motion.div
+                    initial={{ y: 10, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3 }}
+                    className="group relative h-full"
+                  >
+                    <FeedCard 
+                      feed={filteredFeeds.find(feed => feed.imageUrl || (feed.enclosure && feed.enclosure.url)) || filteredFeeds[0]} 
+                      size="featured" 
+                    />
+                  </motion.div>
+                </div>
+              )}
+
+              {/* Sidebar Cards - Weather and Crypto in the grid */}
+              <div className="md:col-span-4 space-y-4">
+                {/* Crypto Card */}
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                >
+                  <CombinedRateCard
+                    cryptoData={rates.crypto}
+                    forexData={rates.forex}
+                    cryptoLoading={cryptoLoading}
+                    forexLoading={forexLoading}
+                  />
+                </motion.div>
+                
+                {/* Weather Card */}
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="rounded-2xl border border-input bg-card/80 p-3 shadow-sm backdrop-blur"
+                >
+                  <WeatherCard />
+                </motion.div>
+              </div>
+
+              {/* Main Feed Grid - Dynamic sizes based on content */}
+              {filteredFeeds.slice(1, visibleCount).map((feed, idx) => {
+                // Determine card size based on content and position
+                const hasImage = feed.imageUrl || (feed.enclosure && feed.enclosure.url);
+                
+                // Create patterns of different sized cards
+                let size: 'small' | 'medium' | 'large';
+                
+                if (idx % 5 === 0 && hasImage) {
+                  size = 'large'; // Every 5th item with image is large
+                } else if (idx % 3 === 0 || !hasImage) {
+                  size = 'small'; // Every 3rd item or items without images are small
+                } else {
+                  size = 'medium'; // Others are medium
+                }
+                
+                // Determine column span based on size
+                const colSpan = size === 'large' ? 'md:col-span-8' : 
+                               size === 'medium' ? 'md:col-span-4' : 
+                               'md:col-span-4';
+                
+                return (
+                  <motion.div
+                    key={feed.guid || idx}
+                    initial={{ y: 10, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.25, delay: 0.05 * (idx % 5), ease: "easeOut" }}
+                    className={`group relative ${colSpan}`}
+                  >
+                    <div className="h-full [--x:50%] [--y:50%] relative overflow-hidden rounded-xl shadow-sm transition-all hover:shadow-md">
+                      <FeedCard feed={feed} size={size} />
+                      {/* hover shimmer effect */}
+                      <div className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" 
+                           style={{ background: "radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(56,189,248,.10), transparent 40%)" }} />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-          )}
-        </section>
+
+            {/* Load more button */}
+            {visibleCount < filteredFeeds.length && (
+              <div className="mt-6 flex justify-center">
+                <motion.button
+                  onClick={() => setVisibleCount((c) => c + 9)}
+                  className="group relative overflow-hidden rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 px-6 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="relative z-10">Load more articles</span>
+                  <span className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-600 to-sky-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                </motion.button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Empty state */}
+        {filteredFeeds.length === 0 && !feedsLoading && (
+          <div className="grid place-items-center rounded-2xl border border-input bg-card/80 py-16 text-center shadow-sm backdrop-blur">
+            <Newspaper className="mb-4 h-16 w-16 text-muted-foreground opacity-50" />
+            <h3 className="mb-2 text-xl font-medium text-foreground">No articles found</h3>
+            <p className="mb-6 max-w-md text-muted-foreground">Try adjusting your search terms or selecting a different category</p>
+            <button 
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory('zimbabwean');
+              }}
+              className="rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+            >
+              Reset filters
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );

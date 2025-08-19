@@ -122,7 +122,7 @@ export default function HomepageSidebar() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
                   <span className="text-primary-foreground font-bold text-sm">N</span>
                 </div>
-                <p className="text-xs text-muted-foreground">Niakazi Dashboard</p>
+                <p className="text-xs text-muted-foreground">NVCCZ Dashboard</p>
               </div>
               
             </motion.div>

@@ -41,15 +41,39 @@ type WeatherCardProps = {
 
 function pickIcon(condition: string, isNight?: boolean) {
   const c = condition.toLowerCase()
-  if (/thunder|storm/.test(c)) return <WiThunderstorm className="text-slate-600" size={48} />
-  if (/rain|drizzle/.test(c)) return <WiRain className="text-slate-600" size={48} />
-  if (/shower/.test(c)) return <WiShowers className="text-slate-600" size={48} />
-  if (/snow|sleet|hail/.test(c)) return <WiSnow className="text-slate-600" size={48} />
-  if (/fog|mist|haze|smoke/.test(c)) return <WiFog className="text-slate-600" size={48} />
-  if (/overcast/.test(c)) return <WiCloudy className="text-slate-600" size={48} />
-  if (/cloud/.test(c)) return isNight ? <WiNightAltCloudy className="text-slate-600" size={48} /> : <WiDayCloudy className="text-slate-600" size={48} />
-  if (/clear|sun/.test(c)) return isNight ? <WiNightClear className="text-slate-600" size={48} /> : <WiDaySunny className="text-slate-600" size={48} />
-  return isNight ? <WiNightAltCloudy className="text-slate-600" size={48} /> : <WiDayCloudy className="text-slate-600" size={48} />
+  const size = 56
+  
+  if (/thunder|storm/.test(c)) 
+    return <WiThunderstorm className="text-amber-500 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" size={size} />
+  
+  if (/rain|drizzle/.test(c)) 
+    return <WiRain className="text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" size={size} />
+  
+  if (/shower/.test(c)) 
+    return <WiShowers className="text-cyan-500 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]" size={size} />
+  
+  if (/snow|sleet|hail/.test(c)) 
+    return <WiSnow className="text-sky-300 drop-shadow-[0_0_8px_rgba(186,230,253,0.5)]" size={size} />
+  
+  if (/fog|mist|haze|smoke/.test(c)) 
+    return <WiFog className="text-slate-400 drop-shadow-[0_0_8px_rgba(148,163,184,0.5)]" size={size} />
+  
+  if (/overcast/.test(c)) 
+    return <WiCloudy className="text-slate-500 drop-shadow-[0_0_8px_rgba(100,116,139,0.5)]" size={size} />
+  
+  if (/cloud/.test(c)) 
+    return isNight 
+      ? <WiNightAltCloudy className="text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]" size={size} /> 
+      : <WiDayCloudy className="text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" size={size} />
+  
+  if (/clear|sun/.test(c)) 
+    return isNight 
+      ? <WiNightClear className="text-indigo-500 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" size={size} /> 
+      : <WiDaySunny className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" size={size} />
+  
+  return isNight 
+    ? <WiNightAltCloudy className="text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]" size={size} /> 
+    : <WiDayCloudy className="text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" size={size} />
 }
 
 export default function WeatherCard({ data, fetchUrl, compact = true, className = '' }: WeatherCardProps) {
@@ -96,6 +120,46 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
 
   const icon = pickIcon(view.condition, view.isNight)
 
+  // Determine background gradient based on condition and time
+  const getBgGradient = () => {
+    const c = view.condition.toLowerCase();
+    if (view.isNight) {
+      return "bg-gradient-to-br from-indigo-900 via-blue-900 to-purple-900";
+    }
+    if (/thunder|storm/.test(c)) {
+      return "bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900";
+    }
+    if (/rain|drizzle|shower/.test(c)) {
+      return "bg-gradient-to-br from-blue-800 via-blue-700 to-blue-900";
+    }
+    if (/snow|sleet|hail/.test(c)) {
+      return "bg-gradient-to-br from-blue-200 via-blue-300 to-blue-100";
+    }
+    if (/fog|mist|haze|smoke|overcast/.test(c)) {
+      return "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600";
+    }
+    if (/cloud/.test(c)) {
+      return "bg-gradient-to-br from-blue-500 via-blue-400 to-sky-500";
+    }
+    // Default sunny
+    return "bg-gradient-to-br from-sky-400 via-blue-400 to-blue-500";
+  };
+
+  // Determine text color based on condition
+  const getTextColor = () => {
+    const c = view.condition.toLowerCase();
+    if (view.isNight || /thunder|storm|rain|drizzle|shower/.test(c)) {
+      return "text-white";
+    }
+    if (/snow|sleet|hail/.test(c)) {
+      return "text-blue-900";
+    }
+    return "text-white";
+  };
+
+  const bgGradient = getBgGradient();
+  const textColor = getTextColor();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
@@ -112,27 +176,84 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
         stiffness: 300,
         damping: 30
       }}
-      className={`relative w-full max-w-[240px] sm:max-w-[280px] bg-slate-200 border border-slate-300 rounded-xl p-3 sm:p-4 md:p-6 text-slate-700 shadow-lg hover:shadow-xl transition-shadow overflow-hidden cursor-pointer font-poppins ${className}`}
+      className={`relative w-full max-w-[240px] sm:max-w-[280px] ${bgGradient} border border-white/20 rounded-xl p-4 sm:p-5 ${textColor} shadow-lg hover:shadow-xl transition-all overflow-hidden cursor-pointer font-poppins ${className}`}
       style={{ fontFamily: 'Poppins, sans-serif' }}
       aria-busy={loading}
     >
-      {/* Simple header */}
-      <div className="flex items-center justify-center mb-3 sm:mb-4">
+      {/* Animated weather effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/rain|drizzle|shower/.test(view.condition.toLowerCase()) && (
+          <div className="absolute inset-0 opacity-30">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div 
+                key={i}
+                className="absolute w-0.5 bg-blue-200 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  height: `${Math.random() * 20 + 10}px`,
+                  opacity: Math.random() * 0.8 + 0.2,
+                  animationDuration: `${Math.random() * 1.5 + 0.5}s`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  animation: 'rainDrop linear infinite',
+                }}
+              />
+            ))}
+          </div>
+        )}
+        
+        {/sun|clear/.test(view.condition.toLowerCase()) && !view.isNight && (
+          <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-300 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3" />
+        )}
+        
+        {view.isNight && (
+          <>
+            <div className="absolute inset-0">
+              {Array.from({ length: 15 }).map((_, i) => (
+                <div 
+                  key={i}
+                  className="absolute bg-white rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    width: `${Math.random() * 2 + 1}px`,
+                    height: `${Math.random() * 2 + 1}px`,
+                    opacity: Math.random() * 0.7 + 0.3,
+                    animation: `twinkle ${Math.random() * 5 + 3}s ease-in-out infinite`,
+                    animationDelay: `${Math.random() * 5}s`,
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Location */}
+      <div className="relative flex items-center justify-between mb-2">
         <motion.div 
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-sm font-medium tracking-wide"
+        >
+          {view.location}
+        </motion.div>
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-xs sm:text-sm font-normal text-slate-600 tracking-wide uppercase"
+          transition={{ delay: 0.3 }}
+          className="text-xs font-light opacity-80"
         >
-          Weather
+          Now
         </motion.div>
       </div>
 
       {/* Main content - Icon and Temperature */}
-      <div className="flex flex-col items-center space-y-3 sm:space-y-4 mb-3 sm:mb-4">
+      <div className="relative flex items-center justify-between mb-4">
         <motion.div 
           className="flex items-center justify-center"
-          initial={{ scale: 0, rotate: -180 }}
+          initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ 
             delay: 0.3,
@@ -149,63 +270,74 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
           {icon}
         </motion.div>
         
-        <div className="text-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl sm:text-3xl md:text-4xl font-normal text-slate-400 mb-1 sm:mb-2"
-          >
-            {Math.round(view.tempC)}°
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-xs sm:text-sm md:text-base text-slate-400 font-normal capitalize"
-          >
-            {view.condition}
-          </motion.div>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-5xl font-light"
+        >
+          {Math.round(view.tempC)}°
+        </motion.div>
       </div>
-
-      {/* Temperature range */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-        className="flex items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-600"
-      >
-        {typeof view.highC === 'number' && (
-          <span className="flex items-center gap-1">
-            <span className="text-slate-500 font-normal">High:</span>
-            <span className="font-normal">{Math.round(view.highC)}°</span>
-          </span>
-        )}
-        {typeof view.lowC === 'number' && (
-          <span className="flex items-center gap-1">
-            <span className="text-slate-500 font-normal">Low:</span>
-            <span className="font-stretch-normal">{Math.round(view.lowC)}°</span>
-          </span>
-        )}
-      </motion.div>
+      
+      {/* Condition and details */}
+      <div className="relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-sm font-medium mb-3 capitalize"
+        >
+          {view.condition}
+        </motion.div>
+        
+        {/* Temperature range */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="flex items-center justify-between text-xs font-medium"
+        >
+          {typeof view.highC === 'number' && typeof view.lowC === 'number' && (
+            <>
+              <div className="flex items-center gap-1">
+                <span className="opacity-80">H:</span>
+                <span>{Math.round(view.highC)}°</span>
+              </div>
+              <div className="h-4 w-px bg-white/30"></div>
+              <div className="flex items-center gap-1">
+                <span className="opacity-80">L:</span>
+                <span>{Math.round(view.lowC)}°</span>
+              </div>
+              {typeof view.feelsLikeC === 'number' && (
+                <>
+                  <div className="h-4 w-px bg-white/30"></div>
+                  <div className="flex items-center gap-1">
+                    <span className="opacity-80">Feels:</span>
+                    <span>{Math.round(view.feelsLikeC)}°</span>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </motion.div>
+      </div>
 
       {/* Loading overlay */}
       {loading && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 bg-slate-200/90 flex flex-col items-center justify-center"
+          className="absolute inset-0 bg-gradient-to-br from-blue-900/90 to-indigo-900/90 backdrop-blur-sm flex flex-col items-center justify-center"
         >
-          <div className="h-1 w-16 sm:w-20 overflow-hidden rounded-full bg-slate-300 mb-2">
+          <div className="h-1.5 w-20 overflow-hidden rounded-full bg-blue-700 mb-3">
             <motion.div 
-              className="h-full bg-slate-600"
+              className="h-full bg-blue-400"
               animate={{ x: ['-100%', '100%'] }}
               transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
             />
           </div>
-          <div className="text-xs text-slate-600 font-normal">Loading weather...</div>
+          <div className="text-xs text-blue-200 font-medium">Loading weather...</div>
         </motion.div>
       )}
       
@@ -214,9 +346,9 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute inset-x-3 sm:inset-x-4 bottom-3 sm:bottom-4 px-3 py-2 bg-red-100 border border-red-200 rounded-lg"
+          className="absolute inset-0 bg-red-900/80 backdrop-blur-sm flex items-center justify-center"
         >
-          <div className="text-xs text-red-600 font-normal text-center">{error}</div>
+          <div className="text-sm text-white font-medium text-center px-4">{error}</div>
         </motion.div>
       )}
     </motion.div>

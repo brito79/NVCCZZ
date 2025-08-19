@@ -41,10 +41,23 @@ function transformFeedToSlides(feedItems: FeedItem[]): HeroSlide[] {
         }
       };
 
+      // Clean and format the content snippet
+      let cleanSubtitle = '';
+      if (item.contentSnippet) {
+        cleanSubtitle = item.contentSnippet;
+      } else if (item.content) {
+        // Remove HTML tags and limit length
+        cleanSubtitle = item.content.replace(/<[^>]*>/g, '').slice(0, 200);
+        // Add ellipsis if truncated
+        if (item.content.length > 200) cleanSubtitle += '...';
+      } else {
+        cleanSubtitle = 'Stay updated with the latest financial news and market insights.';
+      }
+
       return {
         id: item.guid || `slide-${index}`,
         title: item.title || 'Financial News Update',
-        subtitle: item.contentSnippet || item.content?.replace(/<[^>]*>/g, '').slice(0, 200) || 'Stay updated with the latest financial news and market insights.',
+        subtitle: cleanSubtitle,
         image: imageUrl,
         alt: `${item.title} - Financial news article image`,
         pubDate: item.pubDate,
@@ -79,29 +92,29 @@ export default function HeroClient() {
       {
         id: "hero-1",
         title: "Daily Markets. Clear Signals.",
-        subtitle: "Big-visual hero with calm overlay. Inspired by modern financial platforms.",
+        subtitle: "Stay informed with real-time market data and expert analysis to make better financial decisions for your business and investments.",
         image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80",
         alt: "Aerial city skyline at dusk with soft light and distant markets mood",
         source: "NVCCZ",
         cta: { label: "Explore Markets", href: "/feeds" }
       },
       {
-        id: "hero-2", 
-        title: "Zimbabwe Focus. Africa Context.",
-        subtitle: "Editorial hierarchy and premium spacing for headline overlays.",
-        image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=1920&q=80",
-        alt: "Hands using a tablet displaying financial charts and analytics",
-        source: "NVCCZ",
-        cta: { label: "View Analytics", href: "/feeds" }
-      },
-      {
-        id: "hero-3",
+        id: "hero-2",
         title: "Personalized Feeds. Enterprise Ready.", 
-        subtitle: "Comprehensive financial data and insights for informed decision making.",
+        subtitle: "Customize your financial information dashboard with the metrics and news that matter most to your business and investment strategy.",
         image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80",
         alt: "Abstract soft gradient and bokeh lights for brand-forward backdrop",
         source: "NVCCZ",
         cta: { label: "Get Started", href: "/feeds" }
+      },
+      {
+        id: "hero-3",
+        title: "Financial Insights. Informed Decisions.", 
+        subtitle: "Access comprehensive financial analytics and reports to drive strategic business decisions and optimize your investment portfolio.",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&q=80",
+        alt: "Financial data analytics dashboard with charts and graphs",
+        source: "NVCCZ",
+        cta: { label: "View Analytics", href: "/feeds" }
       }
     ];
   }

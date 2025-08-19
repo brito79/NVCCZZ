@@ -20,18 +20,7 @@ export const isFinancialOrEconomic = (feed: FeedItem) => {
 export const categorizeByRegion = (feed: FeedItem) => {
   const content = `${feed.title} ${feed.contentSnippet}`.toLowerCase();
   
-  // Zimbabwean keywords
-  const zimbabweanKeywords = [
-    'zimbabwe', 'zimbabwean', 'harare', 'bulawayo', 'mutare', 'gweru',
-    'masvingo', 'chinhoyi', 'kwekwe', 'kadoma', 'chegutu', 'norton',
-    'rbz', 'reserve bank of zimbabwe', 'zanu-pf', 'mdc', 'zec',
-    'zimra', 'zimbabwe revenue authority', 'rtgs', 'zwl', 'bond notes',
-    'nostro', 'cabs', 'cbz', 'steward bank', 'fbc bank', 'nedbank zimbabwe',
-    'econet', 'telecel', 'netone', 'zimplats', 'implats', 'anglo american',
-    'tobacco', 'mining', 'victoria falls', 'kariba', 'hwange'
-  ];
-  
-  // African keywords (excluding Zimbabwe)
+  // African keywords (including Zimbabwe)
   const africanKeywords = [
     'africa', 'african', 'south africa', 'kenya', 'nigeria', 'ghana', 'egypt',
     'morocco', 'tunisia', 'algeria', 'libya', 'sudan', 'ethiopia', 'uganda',
@@ -42,12 +31,18 @@ export const categorizeByRegion = (feed: FeedItem) => {
     'guinea', 'sierra leone', 'liberia', 'senegal', 'gambia', 'mauritania',
     'djibouti', 'somalia', 'eritrea', 'lesotho', 'swaziland', 'comoros',
     'african union', 'au', 'ecowas', 'sadc', 'eac', 'continental free trade',
-    'afcfta', 'african development bank', 'adb'
+    'afcfta', 'african development bank', 'adb',
+    // Including Zimbabwe keywords in African category
+    'zimbabwe', 'zimbabwean', 'harare', 'bulawayo', 'mutare', 'gweru',
+    'masvingo', 'chinhoyi', 'kwekwe', 'kadoma', 'chegutu', 'norton',
+    'rbz', 'reserve bank of zimbabwe', 'zanu-pf', 'mdc', 'zec',
+    'zimra', 'zimbabwe revenue authority', 'rtgs', 'zwl', 'bond notes',
+    'nostro', 'cabs', 'cbz', 'steward bank', 'fbc bank', 'nedbank zimbabwe',
+    'econet', 'telecel', 'netone', 'zimplats', 'implats', 'anglo american',
+    'tobacco', 'mining', 'victoria falls', 'kariba', 'hwange'
   ];
   
-  if (zimbabweanKeywords.some(keyword => content.includes(keyword))) {
-    return 'zimbabwean';
-  } else if (africanKeywords.some(keyword => content.includes(keyword))) {
+  if (africanKeywords.some(keyword => content.includes(keyword))) {
     return 'african';
   } else {
     return 'international';
@@ -56,7 +51,6 @@ export const categorizeByRegion = (feed: FeedItem) => {
 
 // Categories configuration
 export const categories = [
-  { id: 'zimbabwean', name: 'Zimbabwean News' },
   { id: 'african', name: 'African News' },
   { id: 'international', name: 'International News' },
 ] as const;

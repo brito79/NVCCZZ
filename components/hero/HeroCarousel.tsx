@@ -100,26 +100,34 @@ export default function HeroCarousel({ slides, interval = 5000 }: { slides: Hero
                 target.src = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80";
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/10" aria-hidden="true" />
+            {/* Enhanced gradient overlay for better text visibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" aria-hidden="true" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-              <div className="max-w-4xl">
+              <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-4 sm:p-6 rounded-xl">
                 {/* Publication Date only */}
                 {s.pubDate && (
-                  <div className="mb-2 text-xs text-white/80">
+                  <div className="mb-2 text-xs text-white">
                     <Calendar className="inline h-3 w-3 mr-1" />
                     {formatDate(s.pubDate)}
                   </div>
                 )}
                 
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-white mb-3 line-clamp-2">{s.title}</h2>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-white mb-3 line-clamp-2 text-shadow-lg">{s.title}</h2>
+                
+                {/* Optional subtitle with improved visibility */}
+                {s.subtitle && (
+                  <p className="text-sm sm:text-base text-white mb-4 line-clamp-2 max-w-3xl">
+                    {s.subtitle}
+                  </p>
+                )}
                 
                 {s.cta && (
                   <a
                     href={s.cta.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-white hover:bg-white/90 px-4 py-2 text-sm font-medium text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg"
                   >
                     {s.cta.label}
                     <ExternalLink className="h-4 w-4" />

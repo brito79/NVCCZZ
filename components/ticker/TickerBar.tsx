@@ -96,7 +96,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
 
   if (isLoading) {
     return (
-      <div className={`relative bg-slate-100 border-b border-slate-200 ${className}`}>
+      <div className={`relative bg-slate-100 border border-slate-200 ${className}`}>
         <div className="py-3 px-4">
           <div className="flex items-center gap-6">
             <div className="animate-pulse flex gap-4">
@@ -112,7 +112,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
   }
 
   return (
-    <div className={`relative bg-slate-100 border-b border-slate-200 overflow-hidden ${className}`}>
+    <div className={`relative bg-slate-100 border border-slate-200 overflow-hidden ${className}`}>
       {/* Error indicator (if using fallback data) */}
       {error && (
         <div className="absolute top-1 left-4 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
