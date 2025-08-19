@@ -10,7 +10,7 @@
   - Snippet: sm, 3-line clamp
   - Action: Read More link with aria-label `Read more: {title}`
 - **Text Variant**:
-  - Decorative gradient strip by region
+  - Decorative gradient strip by regionn
   - Content: 24px padding
   - Title: xl/bold, 2-line clamp
   - Snippet: sm/relaxed, 4-line clamp
