@@ -18,8 +18,8 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "NVCCZ - Authentication",
-  description: "Sign in to your NVCCZ account",
+  title: "Arcus - Authentication",
+  description: "Sign in to your Arcus account",
 };
 
 export default function AuthLayout({

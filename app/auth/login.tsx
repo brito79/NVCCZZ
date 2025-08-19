@@ -110,73 +110,17 @@ const LoginPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background with image and overlay */}
+      {/* Simple background with image */}
       <div className="absolute inset-0">
-        {/* Background image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center animate-slow-shift"
-          style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
+        <Image
+          src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=2850&q=80"
+          alt="Modern office building"
+          fill
+          className="object-cover"
+          priority
         />
-        
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-primary-800/80 to-primary-700/90" />
-        
-        {/* Animated particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Floating circles */}
-          <div className="absolute top-[10%] left-[15%] w-3 h-3 rounded-full bg-white opacity-20 animate-float-1"></div>
-          <div className="absolute top-[20%] left-[35%] w-2 h-2 rounded-full bg-white opacity-15 animate-float-2"></div>
-          <div className="absolute top-[15%] left-[75%] w-4 h-4 rounded-full bg-white opacity-10 animate-float-3"></div>
-          <div className="absolute top-[45%] left-[80%] w-3 h-3 rounded-full bg-white opacity-20 animate-float-2"></div>
-          <div className="absolute top-[65%] left-[25%] w-2 h-2 rounded-full bg-white opacity-15 animate-float-1"></div>
-          <div className="absolute top-[75%] left-[85%] w-4 h-4 rounded-full bg-white opacity-10 animate-float-3"></div>
-          <div className="absolute top-[85%] left-[50%] w-3 h-3 rounded-full bg-white opacity-20 animate-float-1"></div>
-          
-          {/* Financial icons */}
-          <div className="absolute top-[30%] left-[10%] text-white opacity-10 animate-float-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-16 h-16">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-            </svg>
-          </div>
-          
-          <div className="absolute top-[70%] left-[75%] text-white opacity-10 animate-float-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-20 h-20">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </div>
-          
-          {/* Abstract shapes */}
-          <div className="absolute top-[20%] left-[80%] w-32 h-32 animate-float-1">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-10">
-              <path fill="#FFFFFF" d="M47.1,-57.8C59.5,-47.8,67.6,-31.5,71.5,-14.1C75.4,3.3,75.2,21.7,67.1,35.8C59,49.9,43,59.6,26.1,65.9C9.2,72.2,-8.7,75,-25.6,70.5C-42.5,66,-58.3,54.2,-67.2,38.5C-76.1,22.8,-78,3.2,-73.2,-14.3C-68.4,-31.8,-56.9,-47.2,-42.8,-56.8C-28.7,-66.4,-12,-70.2,3.2,-74.1C18.4,-78,36.8,-82,47.1,-57.8Z" transform="translate(100 100)" />
-            </svg>
-          </div>
-          
-          <div className="absolute top-[60%] left-[5%] w-40 h-40 animate-float-2">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-10">
-              <path fill="#FFFFFF" d="M42.8,-62.2C54.9,-54.3,63.6,-40.9,69.7,-26.2C75.8,-11.5,79.3,4.6,75.9,19.5C72.5,34.4,62.2,48.2,48.9,57.9C35.6,67.6,19.3,73.2,2.2,70.6C-14.9,68,-32.8,57.2,-45.7,44C-58.6,30.8,-66.5,15.4,-69.2,-2.7C-71.9,-20.8,-69.4,-41.6,-58.5,-50.1C-47.6,-58.6,-28.3,-54.8,-11.9,-51.5C4.5,-48.2,30.7,-70.1,42.8,-62.2Z" transform="translate(100 100)" />
-            </svg>
-          </div>
-        </div>
-        
-        {/* Light beams effect */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-b from-blue-400/30 to-transparent transform -rotate-45"></div>
-          <div className="absolute top-0 left-1/3 w-1/3 h-full bg-gradient-to-b from-blue-300/20 to-transparent transform rotate-45"></div>
-        </div>
-        
-        {/* Wave pattern at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 opacity-20"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFFFFF' fill-opacity='1' d='M0,192L48,176C96,160,192,128,288,133.3C384,139,480,181,576,186.7C672,192,768,160,864,154.7C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E")`,
-            backgroundSize: 'cover'
-          }}
-        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50"></div>
       </div>
       
       {/* Header with logo */}
@@ -188,10 +132,10 @@ const LoginPage = () => {
           className="flex items-center gap-3"
         >
           <div className="h-10 w-10 rounded-lg bg-white shadow-lg flex items-center justify-center">
-            <span className="text-primary-600 font-bold text-lg">N</span>
+            <span className="text-primary-600 font-bold text-lg">A</span>
           </div>
           <div className="text-white">
-            <div className="text-xl font-semibold text-shadow-sm drop-shadow-sm">NVCCZ</div>
+            <div className="text-xl font-semibold text-shadow-sm drop-shadow-sm">Arcus</div>
             <div className="text-xs font-medium text-white">Financial Hub</div>
           </div>
         </motion.div>

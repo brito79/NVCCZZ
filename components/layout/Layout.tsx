@@ -50,10 +50,10 @@ function Header() {
           {/* Brand */}
           <Link href="/" className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-md group">
             <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 shadow-md group-hover:shadow-lg transition-all duration-300" aria-hidden="true">
-              <div className="h-full w-full flex items-center justify-center text-white font-bold text-lg">N</div>
+              <div className="h-full w-full flex items-center justify-center text-white font-bold text-lg">A</div>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-semibold tracking-tight text-primary-900">NVCCZ</span>
+              <span className="text-lg font-semibold tracking-tight text-primary-900">Arcus</span>
               <span className="text-xs text-primary-600/90 font-medium">Financial Hub</span>
             </div>
           </Link>
@@ -126,10 +126,10 @@ function Footer() {
       <div className="max-w-5xl mx-auto px-4 py-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Left side - Company Info */}
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">N</div>
-            <span className="text-sm font-medium text-blue-900">NVCCZ</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">A</div>
+            <span className="text-sm font-medium text-blue-900">Arcus</span>
+          </Link>
           
           {/* Right side - Developer Info */}
           <div className="flex items-center gap-3">
@@ -141,14 +141,14 @@ function Footer() {
               className="group inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-md border border-blue-200 shadow-sm hover:shadow transition-all duration-200"
             >
               <span className="text-xs font-medium text-blue-800 group-hover:text-blue-600 transition-colors">
-                NVCCZ Technology Solutions
+                Niakazi Technology Solutions
               </span>
             </a>
           </div>
           
           {/* Copyright - Mobile: Full width, Desktop: Right aligned */}
           <div className="w-full md:w-auto text-center md:text-right text-[10px] text-blue-600/60 mt-1 md:mt-0">
-            © {new Date().getFullYear()} NVCCZ Technology. All rights reserved.
+            © {new Date().getFullYear()} Niakazi Technology. All rights reserved.
           </div>
         </div>
       </div>

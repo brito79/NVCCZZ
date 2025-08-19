@@ -41,9 +41,9 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
   // Define conversation flows
   const conversationFlows: ConversationFlow = {
     welcome: {
-      message: "Hello! Welcome to NVCCZ. I'm here to help you understand our venture capital services and funding opportunities. How can I assist you today?",
+      message: "Hello! Welcome to Arcus. I'm here to help you understand our financial services and market insights. How can I assist you today?",
       options: [
-        { id: 'about', text: "Tell me about NVCCZ", action: 'about' },
+        { id: 'about', text: "Tell me about Arcus", action: 'about' },
         { id: 'funding', text: "Funding options", action: 'funding' },
         { id: 'apply', text: "How to apply", action: 'apply' },
         { id: 'contact', text: "Contact information", action: 'contact' },
@@ -51,7 +51,7 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
       ]
     },
     about: {
-      message: "The National Venture Capital Company of Zimbabwe (NVCCZ) is Zimbabwe's premier institution providing innovative financing solutions for startups, early-stage businesses, and growing enterprises. We bridge funding gaps and catalyze economic growth through venture capital, private equity, and incubation programs.",
+      message: "Arcus is a comprehensive financial intelligence platform providing real-time market data, financial news feeds, and analytical tools. We specialize in delivering curated financial information and market insights to help businesses and investors make informed decisions.",
       options: [
         { id: 'mission', text: "What's your mission?", action: 'mission' },
         { id: 'values', text: "Core values", action: 'values' },
@@ -268,7 +268,7 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
           isUser: false,
           timestamp: new Date(),
           options: [
-            { id: 'about', text: "Tell me about NVCCZ", action: 'about' },
+            { id: 'about', text: "Tell me about Arcus", action: 'about' },
             { id: 'funding', text: "Funding options", action: 'funding' },
             { id: 'apply', text: "How to apply", action: 'apply' },
             { id: 'contact', text: "Contact information", action: 'contact' },
@@ -312,7 +312,7 @@ const Chatbot = ({ isOpen, onClose, position = 'bottom-right' }: {
                   <Bot size={16} />
                 </div>
                 <div>
-                  <h3 className="font-semibold">NVCCZ Assistant</h3>
+                  <h3 className="font-semibold">Arcus Assistant</h3>
                   <p className="text-xs">Online</p>
                 </div>
               </div>

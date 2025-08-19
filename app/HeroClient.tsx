@@ -95,7 +95,7 @@ export default function HeroClient() {
         subtitle: "Stay informed with real-time market data and expert analysis to make better financial decisions for your business and investments.",
         image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80",
         alt: "Aerial city skyline at dusk with soft light and distant markets mood",
-        source: "NVCCZ",
+        source: "Arcus",
         cta: { label: "Explore Markets", href: "/feeds" }
       },
       {
@@ -104,7 +104,7 @@ export default function HeroClient() {
         subtitle: "Customize your financial information dashboard with the metrics and news that matter most to your business and investment strategy.",
         image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80",
         alt: "Abstract soft gradient and bokeh lights for brand-forward backdrop",
-        source: "NVCCZ",
+        source: "Arcus",
         cta: { label: "Get Started", href: "/feeds" }
       },
       {
@@ -113,7 +113,7 @@ export default function HeroClient() {
         subtitle: "Access comprehensive financial analytics and reports to drive strategic business decisions and optimize your investment portfolio.",
         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&q=80",
         alt: "Financial data analytics dashboard with charts and graphs",
-        source: "NVCCZ",
+        source: "Arcus",
         cta: { label: "View Analytics", href: "/feeds" }
       }
     ];

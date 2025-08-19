@@ -18,7 +18,7 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "NVCCZ",
+  title: "Arcus",
   description: "Financial intelligence and feeds",
 };
 

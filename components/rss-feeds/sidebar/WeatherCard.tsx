@@ -176,7 +176,7 @@ export default function WeatherCard({ data, fetchUrl, compact = true, className 
         stiffness: 300,
         damping: 30
       }}
-      className={`relative w-full max-w-[240px] sm:max-w-[280px] ${bgGradient} border border-white/20 rounded-xl p-4 sm:p-5 ${textColor} shadow-lg hover:shadow-xl transition-all overflow-hidden cursor-pointer font-poppins ${className}`}
+      className={`relative w-full ${bgGradient} border border-white/20 rounded-2xl p-4 sm:p-5 ${textColor} shadow-lg hover:shadow-xl transition-all overflow-hidden cursor-pointer font-poppins ${className}`}
       style={{ fontFamily: 'Poppins, sans-serif' }}
       aria-busy={loading}
     >

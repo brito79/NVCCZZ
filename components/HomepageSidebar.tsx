@@ -120,9 +120,9 @@ export default function HomepageSidebar() {
             >
               <div className='flex items-center gap-3'>
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
-                  <span className="text-primary-foreground font-bold text-sm">N</span>
+                  <span className="text-primary-foreground font-bold text-sm">A</span>
                 </div>
-                <p className="text-xs text-muted-foreground">NVCCZ Dashboard</p>
+                <p className="text-xs text-muted-foreground">Arcus Dashboard</p>
               </div>
               
             </motion.div>
@@ -266,7 +266,7 @@ export default function HomepageSidebar() {
               className="text-center"
               key="footer-expanded"
             >
-              <div className="text-xs text-muted-foreground">NVCCZ Dashboard</div>
+              <div className="text-xs text-muted-foreground">Arcus Dashboard</div>
             </motion.div>
           ) : (
             <motion.div
@@ -278,7 +278,7 @@ export default function HomepageSidebar() {
               key="footer-collapsed"
             >
               <div className="w-5 h-5 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground text-xs font-medium">N</span>
+                <span className="text-primary-foreground text-xs font-medium">A</span>
               </div>
             </motion.div>
           )}

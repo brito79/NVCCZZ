@@ -4,6 +4,42 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Custom grid utilities for better image layout */
+.grid-masonry {
+  display: grid;
+  grid-template-rows: masonry;
+  align-items: start;
+}
+
+/* Ensure grid items fill available space */
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Animation for rain drops in weather card */
+@keyframes rainDrop {
+  0% {
+    transform: translateY(-100vh) rotate(15deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+/* Animation for twinkling stars in weather card */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

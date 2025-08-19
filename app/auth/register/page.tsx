@@ -129,7 +129,7 @@ const RegisterPage = () => {
                 <h1 className="text-4xl font-light text-black mb-2 tracking-wide">
                   Create your account
                 </h1>
-                <p className="text-lg text-gray-700">Join NVCCZ and get started</p>
+                <p className="text-lg text-gray-700">Join Arcus and get started</p>
               </div>
 
               {error && (
