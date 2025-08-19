@@ -29,7 +29,7 @@ const formatDate = (dateString?: string) => {
 export const FeedCard = ({ feed, size = 'medium', className = '' }: FeedCardProps) => {
   const region = categorizeByRegion(feed);
   const regionDisplay =
-    region === "zimbabwean" ? "Zimbabwe" : region === "african" ? "Africa" : "International";
+    region === "african" ? "Africa" : "International";
 
   const hasImage =
     feed.imageUrl || (feed.enclosure && feed.enclosure.url && feed.enclosure.type?.startsWith("image/"));

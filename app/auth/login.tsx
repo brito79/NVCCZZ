@@ -29,13 +29,13 @@ const LoginPage = () => {
   }, [email, password, formTouched]);
 
   const validateEmail = () => {
-    const isValid = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isValid = Boolean(email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
     setEmailValid(isValid);
     return isValid;
   };
 
   const validatePassword = () => {
-    const isValid = password && password.length >= 6;
+    const isValid = Boolean(password && password.length >= 6);
     setPasswordValid(isValid);
     return isValid;
   };
@@ -104,8 +104,7 @@ const LoginPage = () => {
     hidden: { y: 20, opacity: 0 },
     visible: { 
       y: 0, 
-      opacity: 1,
-      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
+      opacity: 1
     }
   };
 
