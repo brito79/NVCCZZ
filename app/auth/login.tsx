@@ -40,53 +40,33 @@ const LoginPage = () => {
     return isValid;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormTouched(true);
-    
-    // Validate form
-    const isEmailValid = validateEmail();
-    const isPasswordValid = validatePassword();
-    
-    if (!isEmailValid || !isPasswordValid) {
-      return;
-    }
-    
     setLoading(true);
     setError('');
 
     try {
-      // Mock login for development/testing
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Accept any email with valid format and any password with 6+ characters
-      if (isEmailValid && isPasswordValid) {
-        // Mock successful login
-        const mockToken = 'mock-jwt-token-' + Math.random().toString(36).substring(2);
-        const mockUserId = 'user-' + Math.random().toString(36).substring(2);
-        
-        // Store in session storage
-        sessionStorage.setItem('token', mockToken);
-        sessionStorage.setItem('userID', mockUserId);
-        
-        if (rememberMe) {
-          // In a real app, you'd use a more secure method for "remember me"
-          localStorage.setItem('rememberedEmail', email);
-        }
-        
-        // Redirect to home page
+      const response = await fetch('https://nvccz-pi.vercel.app/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('userID', data.user.id);
         router.push('/');
       } else {
-        setError('Invalid credentials');
+        setError(data.message || 'Login failed');
       }
-    } catch (err) {
-      console.error('Login error:', err);
+    } catch {
       setError('An error occurred during login');
     } finally {
       setLoading(false);
-    }
-  };
+    }
+  };
 
   // Animation variants
   const containerVariants = {
